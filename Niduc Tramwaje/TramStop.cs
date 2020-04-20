@@ -40,5 +40,25 @@ namespace Niduc_Tramwaje
         {
             return popularity;
         }
+        public Vector2 getPosition()
+        {
+            return position;
+        }
+        public void setPosition(Vector2 position)
+        {
+            this.position = position;
+        }
+        public String getTramStopName()
+        {
+            return name;
+        }
+        public void setTramStopName(String name)
+        {
+            this.name = name;
+        }
+        public List<Passenger> getPassangerList()
+        {
+            return passengers;
+        }
     }
 }
