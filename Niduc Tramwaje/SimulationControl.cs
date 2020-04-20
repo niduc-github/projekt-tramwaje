@@ -10,16 +10,28 @@ namespace Niduc_Tramwaje
 {
     static class SimulationControl
     {
-        static List<Tram> trams;
-        static Map map;
+        static List<Tram> trams = new List<Tram>();
+        static Map map = new Map();
+
+        private static Bitmap b = new Bitmap(640, 480);
+        private static Graphics g = Graphics.FromImage(b);
+        private static Pen pen_black = new Pen(Color.Black);
+        private static Pen pen_red = new Pen(Color.Red);
+        private static Brush brush_white = new SolidBrush(Color.White);
+        private static Brush brush_black = new SolidBrush(Color.Black);
+        private static Brush brush_green = new SolidBrush(Color.Green);
 
         public static void Simulation()
         {
-            map = new Map();
-            test_fill_map();
+            foreach (Tram t in trams)
+            {                
+                TramStop next = t.getNextTramStop();
+                if (next != null) t.GoTo(next);
+                else t.setCurrentTramStop(t.getTrack().getTramStopList()[0]);
+            }
         }
 
-        static void test_fill_map()
+        public static void test_fill_map()
         {
             map.getTramStopList().Add(new TramStop("0", new Vector2(10, 10)));
             map.getTramStopList().Add(new TramStop("1", new Vector2(50, 70)));
@@ -36,21 +48,15 @@ namespace Niduc_Tramwaje
             foreach (TramStop ts in map.getTramStopList())
             {
                 t.getTramStopList().Add(ts);
-            }
-            
-
+            }       
             map.getTrackList().Add(t);
+
+            Tram tr = new Tram(0, t, t.getTramStopList()[0]);
+            trams.Add(tr);
         }
 
         public static Bitmap Display()
         {
-            Bitmap b = new Bitmap(640, 480);
-            Graphics g = Graphics.FromImage(b);
-            Pen pen_black = new Pen(Color.Black);
-            Pen pen_red = new Pen(Color.Red);
-            Brush brush_white = new SolidBrush(Color.White);
-            Brush brush_black = new SolidBrush(Color.Black);
-
             g.FillRectangle(brush_white, 0, 0, b.Width, b.Height);
 
             if (map == null) return b;
@@ -74,7 +80,8 @@ namespace Niduc_Tramwaje
 
             foreach (Tram t in trams)
             {
-                t.
+                if (t.getSpeed() == 0) g.FillRectangle(brush_green, t.getCurrentTramStop().getPosition().X - 6, t.getCurrentTramStop().getPosition().Y - 2, 13 - 1, 5 - 1);
+                else g.FillRectangle(brush_green, (t.getCurrentTramStop().getPosition().X + t.getNextTramStop().getPosition().X) / 2 - 6, (t.getCurrentTramStop().getPosition().Y + t.getNextTramStop().getPosition().Y) / 2 - 2, 13 - 1, 5 - 1);
             }
 
             return b;

@@ -22,10 +22,24 @@ namespace Niduc_Tramwaje
         private void Form1_Load(object sender, EventArgs e)
         {
             this.BackColor = Color.Gray;
-            SimulationControl.Simulation();
+            SimulationControl.test_fill_map();
+            UpdateMap();
+            tmrGraphics.Start();
+        }
+
+        void UpdateMap()
+        {
             picMap.Image = SimulationControl.Display();
         }
 
-        
+        private void btnTest_RuszTramwajem_Click(object sender, EventArgs e)
+        {
+            SimulationControl.Simulation();
+        }
+
+        private void tmrGraphics_Tick(object sender, EventArgs e)
+        {
+            UpdateMap();
+        }
     }
 }

@@ -14,7 +14,7 @@ namespace Niduc_Tramwaje
         private List<Passenger> passengers;
         private TramStop currentTramStop;
 
-        Tram(float speed, Track track, TramStop currentTramStop)
+        public Tram(float speed, Track track, TramStop currentTramStop)
         {
             this.speed = speed;
             this.track = track;
@@ -31,9 +31,28 @@ namespace Niduc_Tramwaje
 
         }
 
-        void GoTo(TramStop tramStop)
+        public void GoTo(TramStop tramStop)
         {
             //TODO
+            if (speed == 0) speed = 27;
+            else
+            {
+                speed = 0;
+                TramStop next = getNextTramStop();
+                if (next != null) currentTramStop = next;
+            }
+        }
+
+        public TramStop getNextTramStop()
+        {
+            int i = 0;
+            for (; i < track.getTramStopList().Count; i++)
+            {
+                if (currentTramStop.Equals(track.getTramStopList()[i])) break;
+            }
+
+            if (track.getTramStopList().Count > i + 1) return track.getTramStopList()[i + 1];
+            else return null;
         }
 
         public float getSpeed()
@@ -59,6 +78,11 @@ namespace Niduc_Tramwaje
         public TramStop getCurrentTramStop()
         {
             return currentTramStop;
+        }
+
+        public void setCurrentTramStop(TramStop ts)
+        {
+            this.currentTramStop = ts;
         }
     }
 }
