@@ -22,15 +22,15 @@ namespace Niduc_Tramwaje
         static void test_fill_map()
         {
             map.getTramStopList().Add(new TramStop("0", new Vector2(10, 10)));
-            map.getTramStopList().Add(new TramStop("1", new Vector2(30, 70)));
-            map.getTramStopList().Add(new TramStop("2", new Vector2(50, 20)));
-            map.getTramStopList().Add(new TramStop("3", new Vector2(46, 87)));
-            map.getTramStopList().Add(new TramStop("4", new Vector2(64, 35)));
-            map.getTramStopList().Add(new TramStop("5", new Vector2(73, 53)));
-            map.getTramStopList().Add(new TramStop("6", new Vector2(90, 60)));
-            map.getTramStopList().Add(new TramStop("7", new Vector2(136, 200)));
-            map.getTramStopList().Add(new TramStop("8", new Vector2(160, 200)));
-            map.getTramStopList().Add(new TramStop("9", new Vector2(285, 90)));
+            map.getTramStopList().Add(new TramStop("1", new Vector2(50, 70)));
+            map.getTramStopList().Add(new TramStop("2", new Vector2(90, 20)));
+            map.getTramStopList().Add(new TramStop("3", new Vector2(140, 87)));
+            map.getTramStopList().Add(new TramStop("4", new Vector2(200, 35)));
+            map.getTramStopList().Add(new TramStop("5", new Vector2(270, 53)));
+            map.getTramStopList().Add(new TramStop("6", new Vector2(340, 60)));
+            map.getTramStopList().Add(new TramStop("7", new Vector2(420, 200)));
+            map.getTramStopList().Add(new TramStop("8", new Vector2(500, 200)));
+            map.getTramStopList().Add(new TramStop("9", new Vector2(560, 90)));
 
             Track t = new Track();
             foreach (TramStop ts in map.getTramStopList())
@@ -72,6 +72,10 @@ namespace Niduc_Tramwaje
                 g.FillRectangle(brush_black, t.getPosition().X - 4, t.getPosition().Y - 4, 9 - 1, 9 - 1);
             }
 
+            foreach (Tram t in trams)
+            {
+                t.
+            }
 
             return b;
         }
