@@ -8,5 +8,7 @@ namespace Niduc_Tramwaje
 {
     struct Track
     {
+        private int number;
+        private List<TramStop> stops;
     }
 }

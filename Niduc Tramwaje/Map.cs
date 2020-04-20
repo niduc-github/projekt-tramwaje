@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace Niduc_Tramwaje
 {
-    class Passenger
+    class Map
     {
-        private TramStop targetStop;
-        public TramStop GetTargetStop()
-        {
-            return targetStop;
-        }
+        private List<TramStop> stops;
+        private List<Track> tracks;
     }
 }
