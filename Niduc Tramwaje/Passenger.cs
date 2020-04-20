@@ -9,6 +9,11 @@ namespace Niduc_Tramwaje
     class Passenger
     {
         private TramStop targetStop;
+        
+        public Passenger(TramStop targetStop)
+        {
+            this.targetStop = targetStop;
+        }
         public TramStop GetTargetStop()
         {
             return targetStop;
