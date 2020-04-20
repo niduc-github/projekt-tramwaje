@@ -10,5 +10,13 @@ namespace Niduc_Tramwaje
     {
         private List<TramStop> stops;
         private List<Track> tracks;
+        public List<TramStop> getTramStopList()
+        {
+            return stops;
+        }
+        public List<Track> getTrackList()
+        {
+            return tracks;
+        }
     }
 }
