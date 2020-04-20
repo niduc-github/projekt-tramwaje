@@ -13,23 +13,21 @@ namespace Niduc_Tramwaje
         private Vector2 position;
         private float amountOfPeople;
         private float popularity;
+        private Random r = new Random();
         List<Passenger> passengers;
 
         public void PassangerGeneration()
         {
             if (popularity < 0.3) 
             {
-                Random r = new Random();
                 amountOfPeople = r.Next(0, 10);
             }
             if (popularity >= 0.3 && popularity < 0.7) 
             {
-                Random r = new Random();
                 amountOfPeople = r.Next(11, 30);
             }
             if (popularity >= 0.7) 
             {
-                Random r = new Random();
                 amountOfPeople = r.Next(31, 60);
             }
         }
