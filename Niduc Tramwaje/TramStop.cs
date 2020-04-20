@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Niduc_Tramwaje
 {
@@ -15,6 +16,12 @@ namespace Niduc_Tramwaje
         private float popularity;
         private Random r = new Random();
         List<Passenger> passengers;
+
+        public TramStop(String name, Vector2 position)
+        {
+            this.name = name;
+            this.position = position;
+        }
 
         public void PassangerGeneration()
         {

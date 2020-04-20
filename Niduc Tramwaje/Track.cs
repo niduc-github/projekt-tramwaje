@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Niduc_Tramwaje
 {
-    struct Track
+    class Track
     {
         private int number;
         private List<TramStop> stops;
@@ -17,6 +17,11 @@ namespace Niduc_Tramwaje
         public List<TramStop> getTramStopList()
         {
             return stops;
+        }
+
+        public Track()
+        {
+            stops = new List<TramStop>();
         }
     }
 }

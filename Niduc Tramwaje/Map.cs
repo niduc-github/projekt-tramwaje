@@ -18,5 +18,11 @@ namespace Niduc_Tramwaje
         {
             return tracks;
         }
+
+        public Map()
+        {
+            stops = new List<TramStop>();
+            tracks = new List<Track>();
+        }
     }
 }
