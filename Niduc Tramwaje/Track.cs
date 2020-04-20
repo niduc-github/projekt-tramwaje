@@ -10,6 +10,10 @@ namespace Niduc_Tramwaje
     {
         private int number;
         private List<TramStop> stops;
+        public Track()
+        {
+            stops = new List<TramStop>();
+        }
         public int getTrackNumber()
         {
             return number;
@@ -17,11 +21,6 @@ namespace Niduc_Tramwaje
         public List<TramStop> getTramStopList()
         {
             return stops;
-        }
-
-        public Track()
-        {
-            stops = new List<TramStop>();
         }
     }
 }
