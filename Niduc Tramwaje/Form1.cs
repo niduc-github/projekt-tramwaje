@@ -15,8 +15,11 @@ namespace Niduc_Tramwaje
 {
     public partial class Form1 : Form
     {
+        static TextBox textBox;
+
         public Form1() {
             InitializeComponent();
+            textBox = textBox1;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -34,12 +37,22 @@ namespace Niduc_Tramwaje
 
         private void btnTest_RuszTramwajem_Click(object sender, EventArgs e)
         {
-            SimulationControl.Simulation();
+            
         }
 
         private void tmrGraphics_Tick(object sender, EventArgs e)
         {
+            SimulationControl.Simulation();
             UpdateMap();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e) {
+
+        }
+
+        public static void WriteToConsole(string text) {
+            textBox.AppendText(text);
+            textBox.AppendText("\n");
         }
     }
 }

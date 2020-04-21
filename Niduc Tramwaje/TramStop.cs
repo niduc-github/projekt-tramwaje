@@ -12,36 +12,38 @@ namespace Niduc_Tramwaje
     {
         private String name;
         private Vector2 position;
-        private float amountOfPeople;
         private float popularity;
-        private Random r = new Random();
+        private static Random r = new Random();
         List<Passenger> passengers;
 
-        public TramStop(String name, Vector2 position)
+        public TramStop(String name, Vector2 position, float popularity)
         {
             this.name = name;
             this.position = position;
+            passengers = new List<Passenger>();
+            this.popularity = popularity;
         }
 
-        public void PassangerGeneration()
+        public TramStop(String name, Vector2 position) : this(name, position, (float)r.NextDouble()) { }
+
+        public void PassangerGeneration(List<TramStop> tramStops)
         {
-            if (popularity < 0.3) 
-            {
-                amountOfPeople = r.Next(0, 10);
+            int amountOfPeople = 0;
+            if (popularity < 0.3) {
+                amountOfPeople = r.Next(0, 4);
+            }else if (popularity >= 0.3 && popularity < 0.7) {
+                amountOfPeople = r.Next(5, 9);
+            }else if (popularity >= 0.7) {
+                amountOfPeople = r.Next(10, 14);
             }
-            if (popularity >= 0.3 && popularity < 0.7) 
-            {
-                amountOfPeople = r.Next(11, 30);
-            }
-            if (popularity >= 0.7) 
-            {
-                amountOfPeople = r.Next(31, 60);
-            }
+
+            for (int i = 0; i < amountOfPeople; i++)
+                passengers.Add(new Passenger(tramStops));
         }
 
         public float GetCurrentAmountOfPeople()
         {
-            return amountOfPeople;
+            return passengers.Count;
         }
         public float GetPopularity()
         {

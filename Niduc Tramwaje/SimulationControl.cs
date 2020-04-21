@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Numerics;
+using System.Diagnostics;
 
 namespace Niduc_Tramwaje
 {
@@ -12,6 +13,8 @@ namespace Niduc_Tramwaje
     {
         static List<Tram> trams = new List<Tram>();
         static Map map = new Map();
+        static float timeStep = 0.01f;
+        static float timeScale = 1f;
 
         private static Bitmap b = new Bitmap(640, 480);
         private static Graphics g = Graphics.FromImage(b);
@@ -21,13 +24,28 @@ namespace Niduc_Tramwaje
         private static Brush brush_black = new SolidBrush(Color.Black);
         private static Brush brush_green = new SolidBrush(Color.Green);
 
+        private static Stopwatch stopwatch = new Stopwatch();
+        private static double time = 0d;
+
+        static SimulationControl() {
+            stopwatch.Start();
+        }
+
         public static void Simulation()
         {
-            foreach (Tram t in trams)
-            {                
-                TramStop next = t.getNextTramStop();
-                if (next != null) t.GoTo(next);
-                else t.setCurrentTramStop(t.getTrack().getTramStopList()[0]);
+            stopwatch.Stop();
+            time += stopwatch.Elapsed.TotalSeconds * timeScale;
+            stopwatch.Restart();
+
+            while(time >= timeStep) {
+                time -= timeStep;
+                UpdateTrams();
+            }
+        }
+
+        private static void UpdateTrams() {
+            foreach (Tram t in trams) {
+                t.Update(timeStep);
             }
         }
 
@@ -48,10 +66,11 @@ namespace Niduc_Tramwaje
             foreach (TramStop ts in map.getTramStopList())
             {
                 t.getTramStopList().Add(ts);
+                ts.PassangerGeneration(map.getTramStopList());
             }       
             map.getTrackList().Add(t);
 
-            Tram tr = new Tram(0, t, t.getTramStopList()[0]);
+            Tram tr = new Tram(30, t, t.getTramStopList()[0]);
             trams.Add(tr);
         }
 
@@ -76,24 +95,16 @@ namespace Niduc_Tramwaje
             foreach (TramStop t in stops)
             {
                 g.FillRectangle(brush_black, t.getPosition().X - 4, t.getPosition().Y - 4, 9 - 1, 9 - 1);
+                g.DrawString(t.GetCurrentAmountOfPeople().ToString(), new Font("Arial", 10), brush_black, t.getPosition().X, t.getPosition().Y + 5);
             }
 
             foreach (Tram t in trams)
             {
-                if (t.getSpeed() == 0) g.FillRectangle(brush_green, t.getCurrentTramStop().getPosition().X - 6, t.getCurrentTramStop().getPosition().Y - 2, 13 - 1, 5 - 1);
-                else g.FillRectangle(brush_green, (t.getCurrentTramStop().getPosition().X + t.getNextTramStop().getPosition().X) / 2 - 6, (t.getCurrentTramStop().getPosition().Y + t.getNextTramStop().getPosition().Y) / 2 - 2, 13 - 1, 5 - 1);
+                int radius = 5;
+                g.FillEllipse(brush_green, t.GetCurrentPos().X - radius, t.GetCurrentPos().Y - radius, radius*2, radius*2);
             }
 
             return b;
         }
-
-        /*private class TramsOnTrack
-        {
-            private Dictionary<KeyValuePair<TramStop, TramStop>, List<KeyValuePair<Tram, float>>> tramsOnTrack;
-
-            public List<KeyValuePair<Tram,float>> GetTramsOnTrack(KeyValuePair<TramStop, TramStop> origindDestPair) {
-                return tramsOnTrack[origindDestPair];
-            }
-        }*/
     }
 }

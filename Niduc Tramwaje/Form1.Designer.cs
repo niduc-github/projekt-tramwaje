@@ -29,6 +29,7 @@ namespace Niduc_Tramwaje
             this.picMap = new System.Windows.Forms.PictureBox();
             this.btnTest_RuszTramwajem = new System.Windows.Forms.Button();
             this.tmrGraphics = new System.Windows.Forms.Timer(this.components);
+            this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.picMap)).BeginInit();
             this.SuspendLayout();
             // 
@@ -52,22 +53,36 @@ namespace Niduc_Tramwaje
             // 
             // tmrGraphics
             // 
+            this.tmrGraphics.Interval = 30;
             this.tmrGraphics.Tick += new System.EventHandler(this.tmrGraphics_Tick);
+            // 
+            // textBox1
+            // 
+            this.textBox1.AccessibleName = "";
+            this.textBox1.Location = new System.Drawing.Point(682, 98);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBox1.Size = new System.Drawing.Size(134, 324);
+            this.textBox1.TabIndex = 2;
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(844, 537);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.btnTest_RuszTramwajem);
             this.Controls.Add(this.picMap);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picMap)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -76,6 +91,7 @@ namespace Niduc_Tramwaje
         private System.Windows.Forms.PictureBox picMap;
         private System.Windows.Forms.Button btnTest_RuszTramwajem;
         private System.Windows.Forms.Timer tmrGraphics;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 

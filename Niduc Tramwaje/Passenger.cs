@@ -8,12 +8,19 @@ namespace Niduc_Tramwaje
 {
     class Passenger
     {
+        Random random = new Random();
+
         private TramStop targetStop;
-        
+
+        public Passenger(List<TramStop> tramStops) {
+            targetStop = tramStops[random.Next(tramStops.Count)];
+        }
+
         public Passenger(TramStop targetStop)
         {
             this.targetStop = targetStop;
         }
+
         public TramStop GetTargetStop()
         {
             return targetStop;
