@@ -12,7 +12,7 @@ namespace Niduc_Tramwaje
         
         public Passenger(TramStop targetStop)
         {
-            this.targetStop = targetStop;
+            this.targetStop = targetStop; //próba
         }
         public TramStop GetTargetStop()
         {
