@@ -31,6 +31,7 @@ namespace Niduc_Tramwaje
             }
         }
 
+        //TEST
         public static void test_fill_map()
         {
             map.getTramStopList().Add(new TramStop("0", new Vector2(10, 10)));
