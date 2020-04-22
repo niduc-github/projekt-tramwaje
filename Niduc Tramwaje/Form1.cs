@@ -20,6 +20,8 @@ namespace Niduc_Tramwaje
         public Form1() {
             InitializeComponent();
             textBox = textBox1;
+            trackBar1.Value = (trackBar1.Minimum + trackBar1.Maximum) / 2;
+            TramStop.GenerationSpeedSlider = (float)trackBar1.Value / trackBar1.Maximum;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -53,6 +55,14 @@ namespace Niduc_Tramwaje
         public static void WriteToConsole(string text) {
             textBox.AppendText(text);
             textBox.AppendText("\n");
+        }
+
+        private void label1_Click(object sender, EventArgs e) {
+
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e) {
+            TramStop.GenerationSpeedSlider = (float)trackBar1.Value / trackBar1.Maximum;
         }
     }
 }
