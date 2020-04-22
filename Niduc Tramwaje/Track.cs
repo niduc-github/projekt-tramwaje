@@ -17,7 +17,8 @@ namespace Niduc_Tramwaje
             this.number = number;
         }
 
-        public Track(int number, List<TramStop> stops) {
+        public Track(int number, List<TramStop> stops) 
+        {
             this.number = number;
             this.stops = stops;
             foreach (TramStop stop in stops)

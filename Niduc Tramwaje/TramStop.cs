@@ -20,7 +20,8 @@ namespace Niduc_Tramwaje
         private float timer = 0f;
         private static float maxGenerationSpeed = 2f;
         private static float generationSlider = 0.5f;
-        public static float GenerationSpeedSlider {
+        public static float GenerationSpeedSlider 
+        {
             get => generationSlider;
             set => generationSlider = Utility.Clamp01(value);
         }
@@ -40,7 +41,8 @@ namespace Niduc_Tramwaje
         public TramStop(String name, Vector2 position) : this(name, position, (float)r.NextDouble()) { }
 
 
-        public void AssignTrack(Track track) {
+        public void AssignTrack(Track track) 
+        {
             tracks.Add(track);
         }
 
@@ -49,7 +51,8 @@ namespace Niduc_Tramwaje
             timer += time;
             if (popularity <= 0.01f || GenerationSpeed <= 0.01f)
                 return;
-            while(timer >= 1 / (popularity * GenerationSpeed)) {
+            while(timer >= 1 / (popularity * GenerationSpeed)) 
+            {
                 timer -= 1 / (popularity * GenerationSpeed);
                 passengers.Add(new Passenger(tramStops));
             }

@@ -12,7 +12,8 @@ namespace Niduc_Tramwaje
 
         private TramStop targetStop;
 
-        public Passenger(List<TramStop> tramStops) {
+        public Passenger(List<TramStop> tramStops) 
+        {
             targetStop = tramStops[random.Next(tramStops.Count)];
         }
 
