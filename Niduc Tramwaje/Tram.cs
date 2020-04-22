@@ -17,10 +17,12 @@ namespace Niduc_Tramwaje
         private TramStop nextTramStop;
         private float progress;
         private bool loading;
+        private bool unloading;
         private int stopIndex;
 
         private float loadSpeed = 10f;
-        private float time = 0f;
+        private float loadTimer = 0f;
+        private float unloadTimer = 0f;
 
         private static Dictionary<KeyValuePair<TramStop,TramStop>,List<Tram>> traffic;
 
@@ -37,6 +39,7 @@ namespace Niduc_Tramwaje
             nextTramStop = GetNextTramStop();
             forward = true;
             loading = true;
+            unloading = true;
             passengers = new List<Passenger>();
             progress = 0;
             traffic = new Dictionary<KeyValuePair<TramStop, TramStop>, List<Tram>>();
@@ -46,21 +49,19 @@ namespace Niduc_Tramwaje
 
         public void Load(float time)
         {     
-            List<Passenger> stopPassangers = currentTramStop.getPassangerList();
-            if(stopPassangers.Count == 0) {
-                Form1.WriteToConsole("Brak oczekujących pasażerów.");
-                Form1.WriteToConsole("Obecnie w tramwaju " + passengers.Count + " pasażerów.");
-                this.time = 0;
+            List<Passenger> stopPassengers = currentTramStop.getPassangerList();
+            if(stopPassengers.Find(x => track.getTramStopList().Find(y => x.GetTargetStop() == y) != null) == null) {
+                loadTimer = 0;
                 loading = false;
                 return;
             }
 
-            this.time += time;
-            for (int i = stopPassangers.Count - 1; i >= 0; i--) {
-                if (this.time > 1/loadSpeed) {
-                    this.time -= 1/loadSpeed;
-                    passengers.Add(stopPassangers[i]);
-                    stopPassangers.RemoveAt(i);
+            loadTimer += time;
+            for (int i = stopPassengers.Count - 1; i >= 0; i--) {
+                if (track.getTramStopList().Contains(stopPassengers[i].GetTargetStop()) && loadTimer > 1/loadSpeed) {
+                    loadTimer -= 1/loadSpeed;
+                    passengers.Add(stopPassengers[i]);
+                    stopPassengers.RemoveAt(i);
                 } else
                     return;
             }
@@ -68,9 +69,21 @@ namespace Niduc_Tramwaje
 
         public void Unload(float time)
         {
+            if (passengers.Find(x => x.GetTargetStop() == currentTramStop) == null) {
+                unloadTimer = 0f;
+                unloading = false;
+                return;
+            }
+
+            unloadTimer += time;
             for(int i = passengers.Count - 1; i >= 0; i--) {
-                if (passengers[i].GetTargetStop() == currentTramStop)
-                    passengers.RemoveAt(i);
+                if (unloadTimer >= 1 / loadSpeed) {
+                    if (passengers[i].GetTargetStop() == currentTramStop) {
+                        unloadTimer -= 1 / loadSpeed;
+                        passengers.RemoveAt(i);
+                    }
+                } else
+                    return;
             }
         }
 
@@ -99,14 +112,18 @@ namespace Niduc_Tramwaje
         }
 
         public void Update(float time) {
-            if (loading) {
+            if (loading || unloading) {
                 Load(time);
+                Unload(time);
+                if (loading == false && unloading == false)
+                    Form1.WriteToConsole("Aktualna liczba pasażerów: " + passengers.Count);
             } else {
                 progress += speed * time / (nextTramStop.getPosition() - currentTramStop.getPosition()).Length();
                 while (progress >= 1) {
                     progress -= 1f;
                     GoToNextStop();
                     loading = true;
+                    unloading = true;
                 }
             }
            

@@ -8,7 +8,7 @@ namespace Niduc_Tramwaje
 {
     class Passenger
     {
-        Random random = new Random();
+        private static Random random = new Random();
 
         private TramStop targetStop;
 
