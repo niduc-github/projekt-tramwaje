@@ -20,8 +20,12 @@ namespace Niduc_Tramwaje
         public Form1() {
             InitializeComponent();
             textBox = textBox1;
+            
             trackBar1.Value = (trackBar1.Minimum + trackBar1.Maximum) / 2;
             TramStop.GenerationSpeedSlider = (float)trackBar1.Value / trackBar1.Maximum;
+
+            trackBar2.Value = (trackBar2.Minimum + trackBar2.Maximum) / 10;
+            SimulationControl.TimeScaleSlider = (float)trackBar2.Value / trackBar2.Maximum;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -63,6 +67,14 @@ namespace Niduc_Tramwaje
 
         private void trackBar1_Scroll(object sender, EventArgs e) {
             TramStop.GenerationSpeedSlider = (float)trackBar1.Value / trackBar1.Maximum;
+        }
+
+        private void trackBar2_Scroll(object sender, EventArgs e) {
+            SimulationControl.TimeScaleSlider = (float)trackBar2.Value / trackBar2.Maximum;
+        }
+
+        private void label3_Click(object sender, EventArgs e) {
+
         }
     }
 }

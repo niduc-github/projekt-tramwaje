@@ -15,7 +15,12 @@ namespace Niduc_Tramwaje
         static List<Tram> trams = new List<Tram>();
         static Map map = new Map();
         static float timeStep = 0.01f;
-        static float timeScale = 1f;
+        static float minTimeScale = 0.1f;
+        static float maxTimeScale = 10f;
+        static float timeScaleSlider = 0.1f;
+
+        static float TimeScale => minTimeScale + (maxTimeScale - minTimeScale) * timeScaleSlider;
+        public static float TimeScaleSlider { set => timeScaleSlider = Utility.Clamp01(value); }
 
         private static Bitmap b = new Bitmap(640, 480);
         private static Graphics g = Graphics.FromImage(b);
@@ -35,7 +40,7 @@ namespace Niduc_Tramwaje
         public static void Simulation()
         {
             stopwatch.Stop();
-            time += stopwatch.Elapsed.TotalSeconds * timeScale;
+            time += stopwatch.Elapsed.TotalSeconds * TimeScale;
             stopwatch.Restart();
 
             while(time >= timeStep) {
@@ -89,12 +94,12 @@ namespace Niduc_Tramwaje
           
             trams.Add(new Tram(20, track33, track33.Stops[0], 0));
             trams.Add(new Tram(15, track33, track33.Stops[0], 4));
-            trams.Add(new Tram(35, track33, track33.Stops[0], 9));
+            //trams.Add(new Tram(35, track33, track33.Stops[0], 9));
             trams.Add(new Tram(20, track33, track33.Stops[0], 13));
 
             trams.Add(new Tram(20, track11, track11.Stops[0], 0));
             trams.Add(new Tram(15, track11, track11.Stops[0], 4));
-            trams.Add(new Tram(35, track11, track11.Stops[0], 9));
+            //trams.Add(new Tram(35, track11, track11.Stops[0], 9));
             trams.Add(new Tram(20, track11, track11.Stops[0], 13));
         }
 
