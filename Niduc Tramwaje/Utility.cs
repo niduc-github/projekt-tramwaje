@@ -16,5 +16,15 @@ namespace Niduc_Tramwaje
             else
                 return value;
         }
+
+        public static int PingPong(int value, int min, int max) {
+            while(value < min || value > max) {
+                if (value > max)
+                    value = 2 * max - value;
+                else if (value < min)
+                    value = 2 * min - value;
+            }
+            return value;
+        }
     }
 }

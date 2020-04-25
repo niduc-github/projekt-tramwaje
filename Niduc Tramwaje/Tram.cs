@@ -20,17 +20,17 @@ namespace Niduc_Tramwaje
         private bool loading;
         private bool unloading;
         private int stopIndex;
-
+        private Map map;
+        private static float minDstBetweenTrams = 10f;
         private float loadSpeed = 10f;
         private float loadTimer = 0f;
         private float unloadTimer = 0f;
         private float spawnDelay = 0f;
 
-        private static Dictionary<KeyValuePair<TramStop,TramStop>,List<Tram>> traffic;
-
         public bool OnTramStop => loading || unloading;
-        public Tram(float speed, Track track, TramStop currentTramStop, float spawnDelay = 0f)
+        public Tram(Map map, float speed, Track track, TramStop currentTramStop, float spawnDelay = 0f)
         {
+            this.map = map;
             this.speed = speed;
             this.track = track;
             this.currentTramStop = currentTramStop;
@@ -41,12 +41,12 @@ namespace Niduc_Tramwaje
                     stopIndex = i;
 
             nextTramStop = GetNextTramStop();
+            map.Traffic[Tuple.Create(currentTramStop, nextTramStop)].Enqueue(this);
             forward = true;
             loading = true;
             unloading = true;
             passengers = new List<Passenger>();
-            progress = 0;
-            traffic = new Dictionary<KeyValuePair<TramStop, TramStop>, List<Tram>>();     
+            progress = 0;       
         }
 
         public void Load(float time)
@@ -93,26 +93,21 @@ namespace Niduc_Tramwaje
 
         private TramStop GetNextTramStop() {
             ReadOnlyCollection<TramStop> stops = track.Stops;
-            if (forward) {
-                if (stopIndex + 1 == stops.Count) {
-                    forward = false;
-                    stopIndex--;
-                } else
-                    stopIndex++;
-            } else {
-                if (stopIndex == 0) {
-                    forward = true;
-                    stopIndex++;
-                } else
-                    stopIndex--;
-            }
-            return stops[stopIndex];
+            return stops[Utility.PingPong(stopIndex + (forward ? 1 : -1), 0, stops.Count - 1)];
         }
+        
 
         private void GoToNextStop()
         {
+            map.Traffic[Tuple.Create(currentTramStop, nextTramStop)].Dequeue();
             currentTramStop = nextTramStop;
+            if (forward) stopIndex++;
+            else stopIndex--;
+
+            if (currentTramStop == track.Stops.Last() || currentTramStop == track.Stops.First())
+                forward = !forward;
             nextTramStop = GetNextTramStop();
+            map.Traffic[Tuple.Create(currentTramStop, nextTramStop)].Enqueue(this);
         }
 
         public void Update(float time) {
@@ -125,15 +120,61 @@ namespace Niduc_Tramwaje
                 Load(time);
                 Unload(time);
             } else {
-                progress += speed * time / (nextTramStop.getPosition() - currentTramStop.getPosition()).Length();
-                while (progress >= 1) {
+                UpdateProgress(time);
+                if (progress >= 1) {
                     progress -= 1f;
                     GoToNextStop();
                     loading = true;
                     unloading = true;
                 }
+            }  
+        }
+
+        //Poprawie te funckje, bo troche balagan jest xd. I beznadziejny algorytm xd.
+        private void UpdateProgress(float time) {
+            Tram nextTram = FindNextTramOnSegment();
+
+            float firstSegMaxProgress = 1f;
+            float secondSegMaxProgress = 0f;
+            if(nextTram != null) {
+                float maxDist = nextTram.progress * nextTram.CurrentSegmentDst() - minDstBetweenTrams;
+                firstSegMaxProgress = maxDist / CurrentSegmentDst();
+            } else if (NextSegmentTraffic().Count > 0) {
+                nextTram = NextSegmentTraffic().Last();
+                float maxDist = CurrentSegmentDst() + nextTram.progress * nextTram.CurrentSegmentDst() - minDstBetweenTrams;
+                float currDist = progress * CurrentSegmentDst();
+                float firstStep = Math.Min(CurrentSegmentDst() - currDist, maxDist - currDist);
+                firstSegMaxProgress = (currDist + firstStep) / CurrentSegmentDst();
+                float secondStep = Math.Max(0, maxDist - CurrentSegmentDst());
+                secondSegMaxProgress = secondStep / nextTram.CurrentSegmentDst();
             }
-           
+
+            progress += speed * time / CurrentSegmentDst();
+            if(progress > 1f) {
+                TramStop nextNextStop = track.Stops[Utility.PingPong(stopIndex + 2, 0, track.Stops.Count - 1)];
+                progress = 1f + ((progress - 1f) * CurrentSegmentDst()) / ((nextTramStop.getPosition() - nextNextStop.getPosition()).Length());
+            }
+
+            progress = Math.Min(firstSegMaxProgress + secondSegMaxProgress, progress);
+        }
+
+        private Queue<Tram> NextSegmentTraffic() {
+            return map.Traffic[Tuple.Create(nextTramStop, track.Stops[Utility.PingPong(stopIndex + (forward ? 2 : -2), 0, track.Stops.Count -1)])];
+        }
+
+        private float CurrentSegmentDst() {
+            return (nextTramStop.getPosition() - currentTramStop.getPosition()).Length();
+        }
+
+        private Tram FindNextTramOnSegment() {
+            var itr = map.Traffic[Tuple.Create(currentTramStop, nextTramStop)].GetEnumerator();
+            Tram previous = null;
+            while (itr.MoveNext()) {
+                if (itr.Current == this)
+                    return previous;
+                previous = itr.Current;     
+            }
+            return null;
         }
 
         public Vector2 GetCurrentPos() {
