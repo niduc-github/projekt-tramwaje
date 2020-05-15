@@ -58,6 +58,25 @@ namespace Niduc_Tramwaje
             }
         }
 
+        public double PopularityMultiplier(int time)
+        {
+            double currentPopularity = 0;
+            if (time <= 14400 || time >= 86400)
+                return currentPopularity = 0;
+            if (time > 14400 && time <= 23384)
+                return currentPopularity = 0.00001 * Math.Pow(time - 14400,2);
+            if (time > 23384 && time <= 27210)
+                return currentPopularity = 4000000 * (1 / (1000 * Math.Sqrt(2 * Math.PI))) * Math.Pow(Math.E, -(Math.Pow(time - 25200, 2)) / 2000000) + 500;
+            if (time > 27210 && time <= 45832)
+                return currentPopularity = 0.000002 * Math.Pow(time - 43200, 2) + 200;
+            if (time > 45832 && time <= 50101)
+                return currentPopularity = 0.00002 * Math.Pow(time - 45000, 2) + 200;
+            if (time > 50101 && time <= 53893)
+                return currentPopularity = 5000000 * (1 / (1000 * Math.Sqrt(2 * Math.PI))) * Math.Pow(Math.E, -(Math.Pow(time - 52200, 2)) / 2000000) + 500;
+            if (time > 53893 && time <= 86400)
+                return currentPopularity = -0.03*(time - 86400);
+            return currentPopularity;
+        }
         public float GetCurrentAmountOfPeople()
         {
             return passengers.Count;
