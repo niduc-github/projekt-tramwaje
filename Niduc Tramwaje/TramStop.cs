@@ -11,7 +11,7 @@ namespace Niduc_Tramwaje
 {
     class TramStop
     {
-        private List<Track> tracks;
+        private HashSet<TramStop> accessibleStops;
         private String name;
         private Vector2 position;
         private float popularity;
@@ -27,7 +27,7 @@ namespace Niduc_Tramwaje
         }
 
         private static float GenerationSpeed => maxGenerationSpeed * GenerationSpeedSlider;
-        public ReadOnlyCollection<Track> Tracks => tracks.AsReadOnly();
+        public IReadOnlyCollection<TramStop> AccessibleStops => accessibleStops;
 
         public TramStop(String name, Vector2 position, float popularity)
         {
@@ -35,18 +35,18 @@ namespace Niduc_Tramwaje
             this.position = position;
             passengers = new List<Passenger>();
             this.popularity = popularity;
-            tracks = new List<Track>();
+            accessibleStops = new HashSet<TramStop>();
         }
 
         public TramStop(String name, Vector2 position) : this(name, position, (float)r.NextDouble()) { }
 
 
-        public void AssignTrack(Track track) 
+        public void ExpandAccessibleStops(Track track) 
         {
-            tracks.Add(track);
+            accessibleStops.UnionWith(track.Stops);
         }
 
-        public void GeneratePassengers(List<TramStop> tramStops, float time)
+        public void GeneratePassengers(IReadOnlyCollection<TramStop> accessibleStops, float time)
         {
             timer += time;
             if (popularity <= 0.01f || GenerationSpeed <= 0.01f)
@@ -54,7 +54,7 @@ namespace Niduc_Tramwaje
             while(timer >= 1 / (popularity * GenerationSpeed)) 
             {
                 timer -= 1 / (popularity * GenerationSpeed);
-                passengers.Add(new Passenger(tramStops));
+                passengers.Add(new Passenger(accessibleStops));
             }
         }
 

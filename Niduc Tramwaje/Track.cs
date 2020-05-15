@@ -22,7 +22,7 @@ namespace Niduc_Tramwaje
             this.number = number;
             this.stops = stops;
             foreach (TramStop stop in stops)
-                stop.AssignTrack(this);
+                stop.ExpandAccessibleStops(this);
         }
 
         public ReadOnlyCollection<TramStop> Stops => stops.AsReadOnly();
@@ -33,7 +33,7 @@ namespace Niduc_Tramwaje
 
         public void AddTramStop(TramStop tramStop) {
             stops.Add(tramStop);
-            tramStop.AssignTrack(this);
+            tramStop.ExpandAccessibleStops(this);
         }
     }
 }

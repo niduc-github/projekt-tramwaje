@@ -12,7 +12,6 @@ namespace Niduc_Tramwaje
 {
     static class SimulationControl
     {
-        static List<Tram> trams = new List<Tram>();
         static Map map = new Map();
         static float timeStep = 0.01f;
         static float minTimeScale = 0.1f;
@@ -51,56 +50,56 @@ namespace Niduc_Tramwaje
         }
 
         private static void UpdateTrams() {
-            foreach (Tram t in trams) {
+            foreach (Tram t in map.Trams) {
                 t.Update(timeStep);
             }
         }
 
         private static void UpdateTramStops() {
-            foreach (TramStop stop in map.getTramStopList())
-                stop.GeneratePassengers(stop.Tracks.SelectMany(x => x.Stops).ToList(), timeStep);
+            foreach (TramStop stop in map.Stops)
+                stop.GeneratePassengers(stop.AccessibleStops, timeStep);
         }
 
         //TEST
         public static void test_fill_map()
         {
-            map.getTramStopList().Add(new TramStop("1", new Vector2(50, 170)));
-            map.getTramStopList().Add(new TramStop("3", new Vector2(140, 187)));
-            map.getTramStopList().Add(new TramStop("4", new Vector2(200, 135)));
-            map.getTramStopList().Add(new TramStop("5", new Vector2(270, 153)));
-            map.getTramStopList().Add(new TramStop("6", new Vector2(340, 160)));
-            map.getTramStopList().Add(new TramStop("7", new Vector2(420, 300)));
-            map.getTramStopList().Add(new TramStop("8", new Vector2(500, 300)));
-            map.getTramStopList().Add(new TramStop("9", new Vector2(560, 190)));
+            map.AddStop(new TramStop("1", new Vector2(50, 170)));
+            map.AddStop(new TramStop("3", new Vector2(140, 187)));
+            map.AddStop(new TramStop("4", new Vector2(200, 135)));
+            map.AddStop(new TramStop("5", new Vector2(270, 153)));
+            map.AddStop(new TramStop("6", new Vector2(340, 160)));
+            map.AddStop(new TramStop("7", new Vector2(420, 300)));
+            map.AddStop(new TramStop("8", new Vector2(500, 300)));
+            map.AddStop(new TramStop("9", new Vector2(560, 190)));
 
-            map.getTramStopList().Add(new TramStop("6", new Vector2(340, 70)));
-            map.getTramStopList().Add(new TramStop("7", new Vector2(350, 370)));
-            map.getTramStopList().Add(new TramStop("7", new Vector2(270, 400)));
+            map.AddStop(new TramStop("6", new Vector2(340, 70)));
+            map.AddStop(new TramStop("7", new Vector2(350, 370)));
+            map.AddStop(new TramStop("7", new Vector2(270, 400)));
 
             List<TramStop> line33stops = new List<TramStop>();
             for (int i = 0; i < 8; i++)
-                line33stops.Add(map.getTramStopList()[i]);
+                line33stops.Add(map.Stops.ElementAt(i));
             Track track33 = new Track(33, line33stops);
-            map.getTrackList().Add(track33);
+            map.AddTrack(track33);
 
             Track track11 = new Track(11, new List<TramStop>() {
-                map.getTramStopList()[8],
-                map.getTramStopList()[4],
-                map.getTramStopList()[5],
-                map.getTramStopList()[9],
-                map.getTramStopList()[10],
+                map.Stops.ElementAt(8),
+                map.Stops.ElementAt(4),
+                map.Stops.ElementAt(5),
+                map.Stops.ElementAt(9),
+                map.Stops.ElementAt(10),
             });
-            map.getTrackList().Add(track11);
+            map.AddTrack(track11);
           
-            trams.Add(new Tram(20, track33, track33.Stops[0], 0));
-            trams.Add(new Tram(15, track33, track33.Stops[0], 4));
-            //trams.Add(new Tram(35, track33, track33.Stops[0], 9));
-            trams.Add(new Tram(20, track33, track33.Stops[0], 13));
+            //map.Trams.Add(new Tram(map, 20, track33, track33.Stops[0], 0));
+            map.Trams.Add(new Tram(map, 15, track33, track33.Stops[0], 4));
+            map.Trams.Add(new Tram(map,35, track33, track33.Stops[0], 9));
+            map.Trams.Add(new Tram(map, 20, track33, track33.Stops[0], 13));
 
-            trams.Add(new Tram(20, track11, track11.Stops[0], 0));
-            trams.Add(new Tram(15, track11, track11.Stops[0], 4));
-            //trams.Add(new Tram(35, track11, track11.Stops[0], 9));
-            trams.Add(new Tram(20, track11, track11.Stops[0], 13));
+            //map.Trams.Add(new Tram(map, 20, track11, track11.Stops[0], 0));
+            map.Trams.Add(new Tram(map, 15, track11, track11.Stops[0], 4));
+            map.Trams.Add(new Tram(map,35, track11, track11.Stops[0], 9));
+            map.Trams.Add(new Tram(map, 20, track11, track11.Stops[0], 13));
         }
 
         public static Bitmap Display()
@@ -109,10 +108,7 @@ namespace Niduc_Tramwaje
 
             if (map == null) return b;
 
-            List<TramStop> stops = map.getTramStopList();
-            List<Track> tracks = map.getTrackList();
-
-            foreach (Track t in tracks)
+            foreach (Track t in map.Tracks)
             {
                 Color trackColor = Color.FromArgb((t.Number * 17) % 256, (t.Number * 39) % 256, (t.Number * 6) % 256);
                 ReadOnlyCollection<TramStop> ts = t.Stops;
@@ -122,13 +118,13 @@ namespace Niduc_Tramwaje
                 }
             }
 
-            foreach (TramStop t in stops)
+            foreach (TramStop t in map.Stops)
             {
                 g.FillRectangle(brush_black, t.getPosition().X - 4, t.getPosition().Y - 4, 9 - 1, 9 - 1);
                 g.DrawString(t.GetCurrentAmountOfPeople().ToString(), new Font("Arial", 10), brush_black, t.getPosition().X, t.getPosition().Y + 5);
             }
 
-            foreach (Tram t in trams)
+            foreach (Tram t in map.Trams)
             {
                 StringFormat stringFormat = new StringFormat();
                 stringFormat.Alignment = StringAlignment.Center;
