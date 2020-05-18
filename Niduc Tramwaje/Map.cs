@@ -17,7 +17,10 @@ namespace Niduc_Tramwaje
         public IReadOnlyCollection<Track> Tracks => tracks;
         public IReadOnlyDictionary<Tuple<TramStop, TramStop>, Queue<Tram>> Traffic => traffic;
         
-
+        public List<TramStop> getStops()
+        {
+            return stops;
+        }
         public void AddTram(Tram newTram) {
             Trams.Add(newTram);
         }

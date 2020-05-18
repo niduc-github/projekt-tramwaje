@@ -32,7 +32,8 @@ namespace Niduc_Tramwaje
         private static Stopwatch stopwatch = new Stopwatch();
         private static double time = 0d;
 
-        static SimulationControl() {
+        static SimulationControl() 
+        {
             stopwatch.Start();
         }
 
@@ -42,24 +43,36 @@ namespace Niduc_Tramwaje
             time += stopwatch.Elapsed.TotalSeconds * TimeScale;
             stopwatch.Restart();
 
-            while(time >= timeStep) {
+            while(time >= timeStep) 
+            {
                 time -= timeStep;
                 UpdateTrams();
                 UpdateTramStops();
             }
         }
 
-        private static void UpdateTrams() {
-            foreach (Tram t in map.Trams) {
+        private static void UpdateTrams() 
+        {
+            foreach (Tram t in map.Trams) 
+            {
                 t.Update(timeStep);
             }
         }
 
-        private static void UpdateTramStops() {
+        private static void UpdateTramStops() 
+        {
             foreach (TramStop stop in map.Stops)
                 stop.GeneratePassengers(stop.AccessibleStops, timeStep);
         }
 
+        public static Map getMap()
+        {
+            return map;
+        }
+        public static double getTime()
+        {
+            return time;
+        }
         //TEST
         public static void test_fill_map()
         {

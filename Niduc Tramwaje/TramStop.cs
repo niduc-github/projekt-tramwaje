@@ -58,7 +58,7 @@ namespace Niduc_Tramwaje
             }
         }
 
-        public double PopularityMultiplier(int time)
+        public double PopularityMultiplier(double time)
         {
             double currentPopularity = 0;
             if (time <= 14400 || time >= 86400)
