@@ -136,7 +136,7 @@ namespace Niduc_Tramwaje
                 UpdateProgress(time);
                 if (progress == 1f) {
                     if (nextTrackPoint is TramStop) {
-                        if ((nextTrackPoint as TramStop).EnterIfHasSpace(CurrentTramStop, this)) {
+                        if ((nextTrackPoint as TramStop).EnterIfHasSpace(currentTrackPoint, this)) {
                             GoToNextStop();
                             progress = 0f;
                             onTramStop = true;
@@ -161,7 +161,7 @@ namespace Niduc_Tramwaje
                 float maxDist = nextTram.progress * nextTram.CurrentSegmentDst() - minDstBetweenTrams;
                 maxProgress = maxDist / CurrentSegmentDst();
             }
-            progress += speed * time / CurrentSegmentDst();
+            progress += speed * (float)(SimulationControl.SecondsToHours(time)) / SimulationControl.BitmapUnitsToKm(CurrentSegmentDst());
             if (progress > maxProgress)
                 progress = Math.Max(0f, maxProgress);
         }

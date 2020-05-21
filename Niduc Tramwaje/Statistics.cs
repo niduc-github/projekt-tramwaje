@@ -13,11 +13,11 @@ namespace Niduc_Tramwaje
         {
             TramStop currentStop = null;
             List<int> statisticOfPeopleOnStop = new List<int>();
-            for(int i=0; i<= SimulationControl.getMap().getStops().Count();i++)
+            for(int i=0; i<= SimulationControl.getMap().TramStops.Count();i++)
             {
-                if(SimulationControl.getMap().getStops()[i].getTramStopName() == tramName)
+                if(SimulationControl.getMap().TramStops.ElementAt(i).getTramStopName() == tramName)
                 {
-                    currentStop = SimulationControl.getMap().getStops()[i];
+                    currentStop = SimulationControl.getMap().TramStops.ElementAt(i);
                     break;
                 }
             }

@@ -21,10 +21,10 @@ namespace Niduc_Tramwaje
             InitializeComponent();
             textBox = textBox1;
             
-            trackBar1.Value = (trackBar1.Minimum + trackBar1.Maximum) / 2;
+            trackBar1.Value = (int)((trackBar1.Minimum + trackBar1.Maximum) * TramStop.GenerationSpeedSlider);
             TramStop.GenerationSpeedSlider = (float)trackBar1.Value / trackBar1.Maximum;
 
-            trackBar2.Value = (trackBar2.Minimum + trackBar2.Maximum) / 10;
+            trackBar2.Value = (int)((trackBar2.Minimum + trackBar2.Maximum) * SimulationControl.TimeScaleSlider);
             SimulationControl.TimeScaleSlider = (float)trackBar2.Value / trackBar2.Maximum;
         }
 

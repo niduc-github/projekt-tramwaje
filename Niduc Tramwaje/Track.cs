@@ -17,12 +17,10 @@ namespace Niduc_Tramwaje
             this.number = number;
         }
 
-        public Track(int number, List<TrackPoint> trackPoints) 
+        public Track(int number, List<TrackPoint> trackPoints) : this(number)
         {
-            this.number = number;
-            this.trackPoints = trackPoints;
-            foreach (TramStop stop in trackPoints)
-                stop.ExpandAccessibleStops(this);
+            foreach (TrackPoint trackPoint in trackPoints)
+                AddTrackPoint(trackPoint);
         }
 
         public IReadOnlyCollection<TramStop> Stops => trackPoints.OfType<TramStop>().ToList();
@@ -33,10 +31,12 @@ namespace Niduc_Tramwaje
         public TramStop this[int index] => Stops.ElementAt(index);
 
         public void AddTrackPoint(TrackPoint trackPoint) {
+            if(trackPoints.Count > 0)
+                trackPoints.Last().Connect(trackPoint);
             trackPoints.Add(trackPoint);
             
             if(trackPoint is TramStop)
-                foreach(TramStop ts in trackPoints)
+                foreach(TramStop ts in trackPoints.OfType<TramStop>())
                     ts.ExpandAccessibleStops(this);
         }
     }
