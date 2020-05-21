@@ -89,12 +89,16 @@ namespace Niduc_Tramwaje
             map.AddStop(new TramStop("7", new Vector2(350, 370)));
             map.AddStop(new TramStop("7", new Vector2(270, 400)));
 
-            List<TramStop> line33stops = new List<TramStop>();
+            List<TrackPoint> track33stops = new List<TrackPoint>();
             for (int i = 0; i < 8; i++)
-                line33stops.Add(map.Stops.ElementAt(i));
-            Track track33 = new Track(33, line33stops);
+                track33stops.Add(map.Stops.ElementAt(i));
+            for (int i = 0; i < 7; i++)
+                map.Stops.ElementAt(i).Connect(map.Stops.ElementAt(i + 1));
+
+            Track track33 = new Track(33, track33stops);
             map.AddTrack(track33);
 
+            /*
             Track track11 = new Track(11, new List<TramStop>() {
                 map.Stops.ElementAt(8),
                 map.Stops.ElementAt(4),
@@ -102,17 +106,18 @@ namespace Niduc_Tramwaje
                 map.Stops.ElementAt(9),
                 map.Stops.ElementAt(10),
             });
-            map.AddTrack(track11);
+            map.AddTrack(track11);*/
           
-            //map.Trams.Add(new Tram(map, 20, track33, track33.Stops[0], 0));
-            map.Trams.Add(new Tram(map, 15, track33, track33.Stops[0], 4));
-            map.Trams.Add(new Tram(map,35, track33, track33.Stops[0], 9));
-            map.Trams.Add(new Tram(map, 20, track33, track33.Stops[0], 13));
+            map.Trams.Add(new Tram(map, 20, track33, track33.Stops.ElementAt(0), 0));
+            //map.Trams.Add(new Tram(map, 15, track33, track33.Stops[0], 4));
+            map.Trams.Add(new Tram(map,35, track33, track33.Stops.ElementAt(0), 9));
+            //map.Trams.Add(new Tram(map, 20, track33, track33.Stops[0], 13));
 
             //map.Trams.Add(new Tram(map, 20, track11, track11.Stops[0], 0));
-            map.Trams.Add(new Tram(map, 15, track11, track11.Stops[0], 4));
-            map.Trams.Add(new Tram(map,35, track11, track11.Stops[0], 9));
-            map.Trams.Add(new Tram(map, 20, track11, track11.Stops[0], 13));
+           // map.Trams.Add(new Tram(map, 15, track11, track11.Stops[0], 4));
+           // map.Trams.Add(new Tram(map,35, track11, track11.Stops[0], 9));
+            //map.Trams.Add(new Tram(map, 20, track11, track11.Stops[0], 13));
+            
         }
 
         public static Bitmap Display()
@@ -121,20 +126,12 @@ namespace Niduc_Tramwaje
 
             if (map == null) return b;
 
-            foreach (Track t in map.Tracks)
-            {
-                Color trackColor = Color.FromArgb((t.Number * 17) % 256, (t.Number * 39) % 256, (t.Number * 6) % 256);
-                ReadOnlyCollection<TramStop> ts = t.Stops;
-                for (int i = 0; i < ts.Count - 1; i++)
-                {
-                    g.DrawLine(new Pen(trackColor), ts[i].getPosition().X, ts[i].getPosition().Y, ts[i + 1].getPosition().X, ts[i + 1].getPosition().Y);
-                }
-            }
-
             foreach (TramStop t in map.Stops)
             {
                 g.FillRectangle(brush_black, t.getPosition().X - 4, t.getPosition().Y - 4, 9 - 1, 9 - 1);
                 g.DrawString(t.GetCurrentAmountOfPeople().ToString(), new Font("Arial", 10), brush_black, t.getPosition().X, t.getPosition().Y + 5);
+                if(t.Connection2 != null)
+                    g.DrawLine(new Pen(brush_black), t.getPosition().X, t.getPosition().Y, t.Connection2.getPosition().X, t.Connection2.getPosition().Y);
             }
 
             foreach (Tram t in map.Trams)

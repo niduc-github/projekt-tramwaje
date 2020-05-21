@@ -9,11 +9,14 @@ using System.Windows.Forms;
 
 namespace Niduc_Tramwaje
 {
-    class TramStop
+    class TramStop : TrackPoint
     {
+        private TrackPoint connection1, connection2;
         private HashSet<TramStop> accessibleStops;
+        private int oneWayTramLimit = 2;
+        private Queue<Tram> slots12;
+        private Queue<Tram> slots21;
         private String name;
-        private Vector2 position;
         private float popularity;
         private static Random r = new Random();
         List<Passenger> passengers;
@@ -26,6 +29,9 @@ namespace Niduc_Tramwaje
             set => generationSlider = Utility.Clamp01(value);
         }
 
+        public TrackPoint Connection1 => connection1;
+        public TrackPoint Connection2 => connection2;
+
         private static float GenerationSpeed => maxGenerationSpeed * GenerationSpeedSlider;
         public IReadOnlyCollection<TramStop> AccessibleStops => accessibleStops;
 
@@ -36,9 +42,52 @@ namespace Niduc_Tramwaje
             passengers = new List<Passenger>();
             this.popularity = popularity;
             accessibleStops = new HashSet<TramStop>();
+            connection1 = this;
+            connection2 = this;
+            slots12 = new Queue<Tram>();
+            slots21 = new Queue<Tram>();
         }
 
         public TramStop(String name, Vector2 position) : this(name, position, (float)r.NextDouble()) { }
+
+        public bool EnterIfHasSpace(TrackPoint from, Tram tram) {
+            Queue<Tram> slots;
+            if (from == connection1) {
+                if (connection2 == this)
+                    slots = slots21;
+                else
+                    slots = slots12;
+            } else if (from == connection2) {
+                if (connection1 == this)
+                    slots = slots12;
+                else
+                    slots = slots21;
+            } else
+                throw new Exception("Nie ma takiego połączenia dla tego punktu!");
+
+            if(slots.Count < oneWayTramLimit) {
+                slots.Enqueue(tram);
+                return true;
+            }
+            return false;
+        }
+
+        public bool LeaveIfFirst(TrackPoint to, Tram tram) {
+           
+            Queue<Tram> slots;
+            if (connection1 == to)
+                slots = slots21;
+            else if (connection2 == to)
+                slots = slots12;
+            else
+                throw new Exception("Nie ma takiego połączenia dla tego punktu!");
+
+            if (slots.Count > 0 && slots.Peek() == tram) {
+                slots.Dequeue();
+                return true;
+            }
+            return false;
+        }
 
 
         public void ExpandAccessibleStops(Track track) 
@@ -46,8 +95,18 @@ namespace Niduc_Tramwaje
             accessibleStops.UnionWith(track.Stops);
         }
 
+        public void Connect(TramStop tramStop)
+        {
+            if (connection2 != null && connection2 != this|| tramStop.connection1 != null && tramStop.connection1 != tramStop)
+                throw new Exception("Conajmniej jedna ze stron jest już połączona!");
+            this.connection2 = tramStop;
+            tramStop.connection1 = this;         
+        }
+
         public void GeneratePassengers(IReadOnlyCollection<TramStop> accessibleStops, float time)
         {
+            if (accessibleStops == null || accessibleStops.Count == 0)
+                return;
             timer += time;
             if (popularity <= 0.01f || GenerationSpeed <= 0.01f)
                 return;
@@ -85,10 +144,7 @@ namespace Niduc_Tramwaje
         {
             return popularity;
         }
-        public Vector2 getPosition()
-        {
-            return position;
-        }
+       
 
 
         public void setPosition(Vector2 position)
@@ -106,6 +162,19 @@ namespace Niduc_Tramwaje
         public List<Passenger> getPassangerList()
         {
             return passengers;
+        }
+
+        protected override bool HasFreeConnection() {
+            return connection1 == null || connection2 == null;
+        }
+
+        protected override void AddConnection(TrackPoint trackPoint) {
+            if (connection1 == null)
+                connection1 = trackPoint;
+            else if (connection2 == null)
+                connection2 = trackPoint;
+            else
+                throw new Exception("Element nie ma żadnych wolnych połączeń!");
         }
     }
 }

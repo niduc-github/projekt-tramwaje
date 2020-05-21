@@ -14,8 +14,9 @@ namespace Niduc_Tramwaje
         private Track track;
         private bool forward;
         private List<Passenger> passengers;
-        private TramStop currentTramStop;
-        private TramStop nextTramStop;
+        private int passangerLimit = 100;
+        private TrackPoint currentTrackPoint;
+        private TrackPoint nextTrackPoint;
         private float progress;
         private bool loading;
         private bool unloading;
@@ -26,22 +27,23 @@ namespace Niduc_Tramwaje
         private float loadTimer = 0f;
         private float unloadTimer = 0f;
         private float spawnDelay = 0f;
+        private bool onTramStop = false;
 
-        public bool OnTramStop => loading || unloading;
-        public Tram(Map map, float speed, Track track, TramStop currentTramStop, float spawnDelay = 0f)
+        private TramStop CurrentTramStop => currentTrackPoint as TramStop;
+        public Tram(Map map, float speed, Track track, TrackPoint currentTrackPoint, float spawnDelay = 0f)
         {
             this.map = map;
             this.speed = speed;
             this.track = track;
-            this.currentTramStop = currentTramStop;
+            this.currentTrackPoint = currentTrackPoint;
             this.spawnDelay = spawnDelay;
 
             for (int i = 0; i < this.track.Stops.Count; i++)
-                if (this.track.Stops[i] == this.currentTramStop)
+                if (this.track.Stops.ElementAt(i) == this.currentTrackPoint)
                     stopIndex = i;
 
-            nextTramStop = GetNextTramStop();
-            map.Traffic[Tuple.Create(currentTramStop, nextTramStop)].Enqueue(this);
+            nextTrackPoint = GetNextTrackPoint();
+            map.Traffic[Tuple.Create(currentTrackPoint, nextTrackPoint)].Enqueue(this);
             forward = true;
             loading = true;
             unloading = true;
@@ -49,65 +51,70 @@ namespace Niduc_Tramwaje
             progress = 0;       
         }
 
-        public void Load(float time)
-        {     
-            List<Passenger> stopPassengers = currentTramStop.getPassangerList();
-            if(stopPassengers.Find(x => track.Stops.Contains(x.GetTargetStop())) == null) {
-                loadTimer = 0;
-                loading = false;
-                return;
-            }
+        public void ExchangePassangers(float time) {
+            if (!(currentTrackPoint is TramStop))
+                throw new Exception("Ten punkt nie jest przystankiem!");
 
             loadTimer += time;
-            for (int i = stopPassengers.Count - 1; i >= 0; i--) {
-                if (track.Stops.Contains(stopPassengers[i].GetTargetStop())) {
-                    if (loadTimer > 1 / loadSpeed) {
-                        loadTimer -= 1 / loadSpeed;
-                        passengers.Add(stopPassengers[i]);
-                        stopPassengers.RemoveAt(i);
-                    } else
-                        return; 
-                }
-            }
-        }
-
-        public void Unload(float time)
-        {
-            if (passengers.Find(x => x.GetTargetStop() == currentTramStop) == null) {
-                unloadTimer = 0f;
-                unloading = false;
-                return;
-            }
-
             unloadTimer += time;
-            for(int i = passengers.Count - 1; i >= 0; i--) {
-                if (unloadTimer >= 1 / loadSpeed) {
-                    if (passengers[i].GetTargetStop() == currentTramStop) {
-                        unloadTimer -= 1 / loadSpeed;
+
+            TramStop currentTramStop = currentTrackPoint as TramStop;
+
+            if (passengers.Count == 0)
+                unloading = false;
+            for (int i = passengers.Count - 1; i >= 0; i--) {
+                if (unloadTimer > 1 / loadSpeed) {
+                    if (currentTramStop == passengers[i].GetTargetStop()) {
                         passengers.RemoveAt(i);
+                        unloadTimer -= 1 / loadSpeed;
                     }
-                } else
-                    return;
+                } else {
+                    break;
+                }
+                if (i == 0)
+                    unloading = false;
+            }
+
+            List<Passenger> passList = currentTramStop.getPassangerList();
+            if (passList.Count == 0)
+                loading = false;
+            for (int i = passList.Count - 1; i >= 0; i--) {
+                if (loadTimer > 1 / loadSpeed) {
+                    if(passengers.Count >= passangerLimit) {
+                        loading = false;
+                        break;
+                    }
+                    if (track.Stops.Contains(passList[i].GetTargetStop())) {
+                        passengers.Add(passList[i]);
+                        passList.RemoveAt(i);
+                        loadTimer -= 1 / loadSpeed;
+                    }
+                } else {
+                    break;
+                }
+                if (i == 0)
+                    loading = false;
             }
         }
 
-        private TramStop GetNextTramStop() {
-            ReadOnlyCollection<TramStop> stops = track.Stops;
-            return stops[Utility.PingPong(stopIndex + (forward ? 1 : -1), 0, stops.Count - 1)];
+
+        private TrackPoint GetNextTrackPoint() {
+            IReadOnlyCollection<TrackPoint> trackPoints = track.TrackPoints;
+            return trackPoints.ElementAt(Utility.PingPong(stopIndex + (forward ? 1 : -1), 0, trackPoints.Count - 1));
         }
         
 
         private void GoToNextStop()
         {
-            map.Traffic[Tuple.Create(currentTramStop, nextTramStop)].Dequeue();
-            currentTramStop = nextTramStop;
+            map.Traffic[Tuple.Create(currentTrackPoint, nextTrackPoint)].Dequeue();
+            currentTrackPoint = nextTrackPoint;
             if (forward) stopIndex++;
             else stopIndex--;
 
-            if (currentTramStop == track.Stops.Last() || currentTramStop == track.Stops.First())
+            if (currentTrackPoint == track.TrackPoints.Last() || currentTrackPoint == track.TrackPoints.First())
                 forward = !forward;
-            nextTramStop = GetNextTramStop();
-            map.Traffic[Tuple.Create(currentTramStop, nextTramStop)].Enqueue(this);
+            nextTrackPoint = GetNextTrackPoint();
+            map.Traffic[Tuple.Create(currentTrackPoint, nextTrackPoint)].Enqueue(this);
         }
 
         public void Update(float time) {
@@ -115,59 +122,60 @@ namespace Niduc_Tramwaje
                 spawnDelay -= time;
                 return;
             }
-
-            if (OnTramStop) {
-                Load(time);
-                Unload(time);
+            
+            if (onTramStop) {
+                if (loading || unloading) {
+                    ExchangePassangers(time);
+                } else if (CurrentTramStop.LeaveIfFirst(nextTrackPoint, this)) {
+                    onTramStop = false;
+                    loadTimer = 0f;
+                    unloadTimer = 0f;
+                }
+                    
             } else {
                 UpdateProgress(time);
-                if (progress >= 1) {
-                    progress -= 1f;
-                    GoToNextStop();
-                    loading = true;
-                    unloading = true;
+                if (progress == 1f) {
+                    if (nextTrackPoint is TramStop) {
+                        if ((nextTrackPoint as TramStop).EnterIfHasSpace(CurrentTramStop, this)) {
+                            GoToNextStop();
+                            progress = 0f;
+                            onTramStop = true;
+                            loading = true;
+                            unloading = true;
+                        }
+                    } else {
+                        GoToNextStop();
+                        progress = 0f;
+                    }
+                              
                 }
             }  
         }
 
-        //Poprawie te funckje, bo troche balagan jest xd. I beznadziejny algorytm xd.
+
         private void UpdateProgress(float time) {
             Tram nextTram = FindNextTramOnSegment();
 
-            float firstSegMaxProgress = 1f;
-            float secondSegMaxProgress = 0f;
-            if(nextTram != null) {
+            float maxProgress = 1f;
+            if (nextTram != null) {
                 float maxDist = nextTram.progress * nextTram.CurrentSegmentDst() - minDstBetweenTrams;
-                firstSegMaxProgress = maxDist / CurrentSegmentDst();
-            } else if (NextSegmentTraffic().Count > 0) {
-                nextTram = NextSegmentTraffic().Last();
-                float maxDist = CurrentSegmentDst() + nextTram.progress * nextTram.CurrentSegmentDst() - minDstBetweenTrams;
-                float currDist = progress * CurrentSegmentDst();
-                float firstStep = Math.Min(CurrentSegmentDst() - currDist, maxDist - currDist);
-                firstSegMaxProgress = (currDist + firstStep) / CurrentSegmentDst();
-                float secondStep = Math.Max(0, maxDist - CurrentSegmentDst());
-                secondSegMaxProgress = secondStep / nextTram.CurrentSegmentDst();
+                maxProgress = maxDist / CurrentSegmentDst();
             }
-
             progress += speed * time / CurrentSegmentDst();
-            if(progress > 1f) {
-                TramStop nextNextStop = track.Stops[Utility.PingPong(stopIndex + 2, 0, track.Stops.Count - 1)];
-                progress = 1f + ((progress - 1f) * CurrentSegmentDst()) / ((nextTramStop.getPosition() - nextNextStop.getPosition()).Length());
-            }
-
-            progress = Math.Min(firstSegMaxProgress + secondSegMaxProgress, progress);
+            if (progress > maxProgress)
+                progress = Math.Max(0f, maxProgress);
         }
 
         private Queue<Tram> NextSegmentTraffic() {
-            return map.Traffic[Tuple.Create(nextTramStop, track.Stops[Utility.PingPong(stopIndex + (forward ? 2 : -2), 0, track.Stops.Count -1)])];
+            return map.Traffic[Tuple.Create(nextTrackPoint, track.TrackPoints.ElementAt(Utility.PingPong(stopIndex + (forward ? 2 : -2), 0, track.Stops.Count - 1)))];
         }
 
         private float CurrentSegmentDst() {
-            return (nextTramStop.getPosition() - currentTramStop.getPosition()).Length();
+            return (nextTrackPoint.getPosition() - currentTrackPoint.getPosition()).Length();
         }
 
         private Tram FindNextTramOnSegment() {
-            var itr = map.Traffic[Tuple.Create(currentTramStop, nextTramStop)].GetEnumerator();
+            var itr = map.Traffic[Tuple.Create(currentTrackPoint, nextTrackPoint)].GetEnumerator();
             Tram previous = null;
             while (itr.MoveNext()) {
                 if (itr.Current == this)
@@ -178,7 +186,7 @@ namespace Niduc_Tramwaje
         }
 
         public Vector2 GetCurrentPos() {
-            return Vector2.Lerp(currentTramStop.getPosition(), nextTramStop.getPosition(), progress);
+            return Vector2.Lerp(currentTrackPoint.getPosition(), nextTrackPoint.getPosition(), progress);
         }
 
         public float getSpeed()
@@ -201,9 +209,9 @@ namespace Niduc_Tramwaje
             return passengers.Count();
         }
 
-        public TramStop getCurrentTramStop()
+        public TrackPoint getCurrentTrackPoint()
         {
-            return currentTramStop;
+            return currentTrackPoint;
         }
     }
 }

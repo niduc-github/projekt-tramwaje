@@ -10,12 +10,12 @@ namespace Niduc_Tramwaje
     {
         private List<TramStop> stops = new List<TramStop>();
         private List<Track> tracks = new List<Track>();
-        private static Dictionary<Tuple<TramStop, TramStop>, Queue<Tram>> traffic = new Dictionary<Tuple<TramStop, TramStop>, Queue<Tram>>();
+        private static Dictionary<Tuple<TrackPoint, TrackPoint>, Queue<Tram>> traffic = new Dictionary<Tuple<TrackPoint, TrackPoint>, Queue<Tram>>();
         public List<Tram> Trams { get; } = new List<Tram>();
 
         public IReadOnlyCollection<TramStop> Stops => stops;
         public IReadOnlyCollection<Track> Tracks => tracks;
-        public IReadOnlyDictionary<Tuple<TramStop, TramStop>, Queue<Tram>> Traffic => traffic;
+        public IReadOnlyDictionary<Tuple<TrackPoint, TrackPoint>, Queue<Tram>> Traffic => traffic;
         
         public List<TramStop> getStops()
         {
@@ -32,10 +32,10 @@ namespace Niduc_Tramwaje
         public void AddTrack(Track newTrack) {
             tracks.Add(newTrack);
             for(int i = 0; i < newTrack.Stops.Count - 1; i++) {
-                if (!traffic.ContainsKey(Tuple.Create(newTrack.Stops[i], newTrack.Stops[i + 1])))
-                    traffic.Add(Tuple.Create(newTrack.Stops[i], newTrack.Stops[i + 1]), new Queue<Tram>());
-                if (!traffic.ContainsKey(Tuple.Create(newTrack.Stops[i + 1], newTrack.Stops[i])))
-                    traffic.Add(Tuple.Create(newTrack.Stops[i + 1], newTrack.Stops[i]), new Queue<Tram>());
+                if (!traffic.ContainsKey(Tuple.Create(newTrack.TrackPoints.ElementAt(i), newTrack.TrackPoints.ElementAt(i + 1))))
+                    traffic.Add(Tuple.Create(newTrack.TrackPoints.ElementAt(i), newTrack.TrackPoints.ElementAt(i + 1)), new Queue<Tram>());
+                if (!traffic.ContainsKey(Tuple.Create(newTrack.TrackPoints.ElementAt(i + 1), newTrack.TrackPoints.ElementAt(i))))
+                    traffic.Add(Tuple.Create(newTrack.TrackPoints.ElementAt(i + 1), newTrack.TrackPoints.ElementAt(i)), new Queue<Tram>());
             }
         }
 

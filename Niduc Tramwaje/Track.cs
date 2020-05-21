@@ -10,30 +10,34 @@ namespace Niduc_Tramwaje
     class Track
     {
         private int number;
-        private List<TramStop> stops;
+        private List<TrackPoint> trackPoints;
         public Track(int number)
         {
-            stops = new List<TramStop>();
+            trackPoints = new List<TrackPoint>();
             this.number = number;
         }
 
-        public Track(int number, List<TramStop> stops) 
+        public Track(int number, List<TrackPoint> trackPoints) 
         {
             this.number = number;
-            this.stops = stops;
-            foreach (TramStop stop in stops)
+            this.trackPoints = trackPoints;
+            foreach (TramStop stop in trackPoints)
                 stop.ExpandAccessibleStops(this);
         }
 
-        public ReadOnlyCollection<TramStop> Stops => stops.AsReadOnly();
+        public IReadOnlyCollection<TramStop> Stops => trackPoints.OfType<TramStop>().ToList();
+        public IReadOnlyCollection<TrackPoint> TrackPoints => trackPoints;
 
         public int Number => number;
 
-        public TramStop this[int index] => stops[index];
+        public TramStop this[int index] => Stops.ElementAt(index);
 
-        public void AddTramStop(TramStop tramStop) {
-            stops.Add(tramStop);
-            tramStop.ExpandAccessibleStops(this);
+        public void AddTrackPoint(TrackPoint trackPoint) {
+            trackPoints.Add(trackPoint);
+            
+            if(trackPoint is TramStop)
+                foreach(TramStop ts in trackPoints)
+                    ts.ExpandAccessibleStops(this);
         }
     }
 }

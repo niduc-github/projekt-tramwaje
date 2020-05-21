@@ -14,7 +14,8 @@ namespace Niduc_Tramwaje
 
         public Passenger(IReadOnlyCollection<TramStop> possibleStops) 
         {
-            targetStop = possibleStops.ElementAt(random.Next(possibleStops.Count));
+            if(possibleStops.Count > 0)
+                targetStop = possibleStops.ElementAt(random.Next(possibleStops.Count));
         }
 
         public Passenger(TramStop targetStop)
