@@ -31,7 +31,7 @@ namespace Niduc_Tramwaje
         public TramStop this[int index] => Stops.ElementAt(index);
 
         public void AddTrackPoint(TrackPoint trackPoint) {
-            if(trackPoints.Count > 0)
+            if(trackPoints.Count > 0 && !trackPoints.Last().IsConnectedWith(trackPoint))
                 trackPoints.Last().Connect(trackPoint);
             trackPoints.Add(trackPoint);
             

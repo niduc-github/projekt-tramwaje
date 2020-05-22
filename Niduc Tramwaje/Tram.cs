@@ -20,10 +20,10 @@ namespace Niduc_Tramwaje
         private float progress;
         private bool loading;
         private bool unloading;
-        private int stopIndex;
+        private int trackPointIndex;
         private Map map;
         private static float minDstBetweenTrams = 10f;
-        private float loadSpeed = 10f;
+        private float loadSpeed = 1f;
         private float loadTimer = 0f;
         private float unloadTimer = 0f;
         private float spawnDelay = 0f;
@@ -37,18 +37,45 @@ namespace Niduc_Tramwaje
             this.track = track;
             this.currentTrackPoint = currentTrackPoint;
             this.spawnDelay = spawnDelay;
-
-            for (int i = 0; i < this.track.Stops.Count; i++)
-                if (this.track.Stops.ElementAt(i) == this.currentTrackPoint)
-                    stopIndex = i;
-
-            nextTrackPoint = GetNextTrackPoint();
-            map.Traffic[Tuple.Create(currentTrackPoint, nextTrackPoint)].Enqueue(this);
             forward = true;
             loading = true;
             unloading = true;
             passengers = new List<Passenger>();
-            progress = 0;       
+            progress = 0;
+
+            for (int i = 0; i < this.track.TrackPoints.Count; i++)
+                if (this.track.TrackPoints.ElementAt(i) == this.currentTrackPoint)
+                    trackPointIndex = i;
+            nextTrackPoint = GetNextTrackPoint();
+            map.Traffic[Tuple.Create(currentTrackPoint, nextTrackPoint)].Enqueue(this);       
+        }
+
+        public void UpdateArrivalTimes() {
+            foreach(TramStop tramStop in track.Stops) {
+                tramStop.UpdateArrivalTime(this);
+            }
+        }
+
+        public float GetTimeToStop(TramStop tramStop) {
+            if (!track.Stops.Contains(tramStop))
+                throw new Exception("Ten tramwaj nie posiada tego przystanku na trasie!");
+            int i = trackPointIndex;
+            bool tempForward = forward;
+            float distance = 0;
+            while(track.TrackPoints.ElementAt(Utility.PingPong(i,0,track.TrackPoints.Count-1)) != tramStop) {
+                if (i == track.TrackPoints.Count - 1 || i == 0)
+                    tempForward = !tempForward;
+                i++;
+                distance += (track.TrackPoints.ElementAt(Utility.PingPong(i, 0, track.TrackPoints.Count - 1)).getPosition() - track.TrackPoints.ElementAt(Utility.PingPong(i-1, 0, track.TrackPoints.Count - 1)).getPosition()).Length();
+            }
+            distance = SimulationControl.BitmapUnitsToKm(distance);
+            return (float)SimulationControl.HoursToSeconds(distance / speed);
+        }
+
+        private bool BestChoice(Passenger passenger, TramStop targetTramStop) {
+            List<Tuple<Tram, float>> suitingTrams = targetTramStop.IncomingTramsTimes.Where(x => x.Item1.getTrack().Stops.Contains(CurrentTramStop)).ToList();
+            suitingTrams.Sort(Comparer<Tuple<Tram, float>>.Create((x, y) => (x.Item2 + x.Item1.GetTimeToStop(CurrentTramStop)).CompareTo(y.Item2 + y.Item1.GetTimeToStop(CurrentTramStop))));
+            return suitingTrams.First().Item1 == this;
         }
 
         public void ExchangePassangers(float time) {
@@ -85,9 +112,11 @@ namespace Niduc_Tramwaje
                         break;
                     }
                     if (track.Stops.Contains(passList[i].GetTargetStop())) {
-                        passengers.Add(passList[i]);
-                        passList.RemoveAt(i);
-                        loadTimer -= 1 / loadSpeed;
+                        if(BestChoice(passList[i], passList[i].GetTargetStop())) {
+                            passengers.Add(passList[i]);
+                            passList.RemoveAt(i);
+                            loadTimer -= 1 / loadSpeed;
+                        }        
                     }
                 } else {
                     break;
@@ -99,8 +128,10 @@ namespace Niduc_Tramwaje
 
 
         private TrackPoint GetNextTrackPoint() {
+            if (track.TrackPoints.Count < 2)
+                throw new Exception("Trasa musi mieć conajmniej 2 przystanki!");
             IReadOnlyCollection<TrackPoint> trackPoints = track.TrackPoints;
-            return trackPoints.ElementAt(Utility.PingPong(stopIndex + (forward ? 1 : -1), 0, trackPoints.Count - 1));
+            return trackPoints.ElementAt(Utility.PingPong(trackPointIndex + (forward ? 1 : -1), 0, trackPoints.Count - 1));
         }
         
 
@@ -108,8 +139,8 @@ namespace Niduc_Tramwaje
         {
             map.Traffic[Tuple.Create(currentTrackPoint, nextTrackPoint)].Dequeue();
             currentTrackPoint = nextTrackPoint;
-            if (forward) stopIndex++;
-            else stopIndex--;
+            if (forward) trackPointIndex++;
+            else trackPointIndex--;
 
             if (currentTrackPoint == track.TrackPoints.Last() || currentTrackPoint == track.TrackPoints.First())
                 forward = !forward;
@@ -167,7 +198,7 @@ namespace Niduc_Tramwaje
         }
 
         private Queue<Tram> NextSegmentTraffic() {
-            return map.Traffic[Tuple.Create(nextTrackPoint, track.TrackPoints.ElementAt(Utility.PingPong(stopIndex + (forward ? 2 : -2), 0, track.Stops.Count - 1)))];
+            return map.Traffic[Tuple.Create(nextTrackPoint, track.TrackPoints.ElementAt(Utility.PingPong(trackPointIndex + (forward ? 2 : -2), 0, track.TrackPoints.Count - 1)))];
         }
 
         private float CurrentSegmentDst() {

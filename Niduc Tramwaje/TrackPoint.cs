@@ -21,6 +21,7 @@ namespace Niduc_Tramwaje
 
         protected abstract bool HasFreeConnection();
         protected abstract void AddConnection(TrackPoint trackPoint);
+        protected abstract bool HasConnection(TrackPoint trackPoint);
 
         public void Connect(TrackPoint trackPoint) {
             if (this.HasFreeConnection() && trackPoint.HasFreeConnection()) {
@@ -28,6 +29,10 @@ namespace Niduc_Tramwaje
                 trackPoint.AddConnection(this);
             } else
                 throw new Exception("Jeden z elementów nie ma wolnych połączeń!");
+        }
+
+        public bool IsConnectedWith(TrackPoint trackPoint) {
+            return this.HasConnection(trackPoint) && trackPoint.HasConnection(this);
         }
     }
 }

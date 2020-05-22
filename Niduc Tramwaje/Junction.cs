@@ -23,5 +23,9 @@ namespace Niduc_Tramwaje {
         protected override bool HasFreeConnection() {
             return true;
         }
+
+        protected override bool HasConnection(TrackPoint trackPoint) {
+            return connections.Contains(trackPoint);
+        }
     }
 }

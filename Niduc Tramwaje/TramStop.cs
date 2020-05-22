@@ -21,7 +21,9 @@ namespace Niduc_Tramwaje
         private static Random r = new Random();
         List<Passenger> passengers;
         private float timer = 0f;
-        private static float maxGenerationSpeed = 150f;
+        List<Tuple<Tram, float>> incomingTramsTimes;
+
+        private static float maxGenerationSpeed = 400f;
         private static float generationSlider = 0.5f;
         public static float GenerationSpeedSlider
         {
@@ -34,11 +36,13 @@ namespace Niduc_Tramwaje
 
         private static float GenerationSpeed => maxGenerationSpeed * GenerationSpeedSlider;
         public IReadOnlyCollection<TramStop> AccessibleStops => accessibleStops;
+        public IReadOnlyCollection<Tuple<Tram, float>> IncomingTramsTimes => incomingTramsTimes;
 
         public TramStop(String name, Vector2 position, float popularity)
         {
             this.name = name;
             this.position = position;
+            incomingTramsTimes = new List<Tuple<Tram, float>>();
             passengers = new List<Passenger>();
             this.popularity = popularity;
             accessibleStops = new HashSet<TramStop>();
@@ -49,6 +53,17 @@ namespace Niduc_Tramwaje
         }
 
         public TramStop(String name, Vector2 position) : this(name, position, (float)r.NextDouble()) { }
+
+        public void UpdateArrivalTime(Tram tram) {
+            for(int i = incomingTramsTimes.Count - 1; i >= 0; i--) {
+                if(incomingTramsTimes[i].Item1 == tram) {
+                    incomingTramsTimes.RemoveAt(i);
+                    break;
+                }
+            }
+            incomingTramsTimes.Add(Tuple.Create(tram, tram.GetTimeToStop(this)));
+            incomingTramsTimes.Sort(Comparer<Tuple<Tram, float>>.Create((x, y) => x.Item2.CompareTo(y.Item2)));
+        }
 
         public bool EnterIfHasSpace(TrackPoint from, Tram tram) {
             Queue<Tram> slots;
@@ -73,7 +88,6 @@ namespace Niduc_Tramwaje
         }
 
         public bool LeaveIfFirst(TrackPoint to, Tram tram) {
-           
             Queue<Tram> slots;
             if (connection1 == to)
                 slots = slots21;
@@ -95,6 +109,11 @@ namespace Niduc_Tramwaje
             accessibleStops.UnionWith(track.Stops);
         }
 
+        public void AddPassengers(IReadOnlyCollection<TramStop> accessibleStops, int amount) {
+            for(int i = 0; i < amount; i++)
+                passengers.Add(new Passenger(accessibleStops));
+        }
+
         public void GeneratePassengers(IReadOnlyCollection<TramStop> accessibleStops, float time)
         {
             if (accessibleStops == null || accessibleStops.Count == 0)
@@ -104,7 +123,7 @@ namespace Niduc_Tramwaje
                 return;
             float timePerPassenger = 
                 (float)SimulationControl.HoursToSeconds(
-                    (1f / (popularity * GenerationSpeed * PopularityMultiplier(SimulationControl.TotalTime)))
+                    (1f / (popularity * GenerationSpeed /** PopularityMultiplier(SimulationControl.TotalTime)*/))
                     );
             while (timer >= timePerPassenger) {
                 timer -= timePerPassenger;
@@ -129,7 +148,7 @@ namespace Niduc_Tramwaje
                 currentPopularity = 5000000 * (1 / (1000 * Math.Sqrt(2 * Math.PI))) * Math.Pow(Math.E, -(Math.Pow(time - 52200, 2)) / 2000000) + 500;
             if (time > 53893 && time <= 86400)
                 currentPopularity = -0.03*(time - 86400);
-            return currentPopularity / 600d;
+            return currentPopularity / 2500d;
         }
         public float GetCurrentAmountOfPeople()
         {
@@ -161,6 +180,10 @@ namespace Niduc_Tramwaje
 
         protected override bool HasFreeConnection() {
             return connection1 == null || connection2 == null;
+        }
+
+        protected override bool HasConnection(TrackPoint trackPoint) {
+            return trackPoint == connection1 || trackPoint == connection2;
         }
 
         protected override void AddConnection(TrackPoint trackPoint) {

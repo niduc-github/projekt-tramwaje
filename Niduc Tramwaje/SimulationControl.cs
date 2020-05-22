@@ -14,9 +14,9 @@ namespace Niduc_Tramwaje
     {
         static Map map = new Map();
         static float timeStep = 1f;
-        static float minTimeScale = 1f;
+        static float minTimeScale = 0f;
         static float maxTimeScale = 10000f;
-        static float timeScaleSlider = 0.001f;
+        static float timeScaleSlider = 1.01f/maxTimeScale;
 
         static float TimeScale => minTimeScale + (maxTimeScale - minTimeScale) * timeScaleSlider;
         public static float TimeScaleSlider {
@@ -77,6 +77,7 @@ namespace Niduc_Tramwaje
             foreach (Tram t in map.Trams) 
             {
                 t.Update(timeStep);
+                t.UpdateArrivalTimes();
             }
         }
 
@@ -101,16 +102,18 @@ namespace Niduc_Tramwaje
             map.AddTrackPoint(new TramStop("3", new Vector2(140, 187)));
             map.AddTrackPoint(new TramStop("4", new Vector2(200, 135)));
             map.AddTrackPoint(new TramStop("5", new Vector2(270, 153)));
-            map.AddTrackPoint(new TramStop("6", new Vector2(340, 160)));
 
-            map.AddTrackPoint(new Junction(new Vector2(360, 200)));
+            map.AddTrackPoint(new Junction(new Vector2(320, 158)));
+
+            map.AddTrackPoint(new TramStop("6", new Vector2(340, 160)));
+           
             map.AddTrackPoint(new Junction(new Vector2(380, 240)));
 
             map.AddTrackPoint(new TramStop("7", new Vector2(420, 300)));
             map.AddTrackPoint(new TramStop("8", new Vector2(500, 300)));
             map.AddTrackPoint(new TramStop("9", new Vector2(560, 190)));
 
-            map.AddTrackPoint(new TramStop("6", new Vector2(340, 70)));
+            map.AddTrackPoint(new TramStop("6", new Vector2(290, 70)));
             map.AddTrackPoint(new TramStop("7", new Vector2(350, 370)));
             map.AddTrackPoint(new TramStop("7", new Vector2(270, 400)));
 
@@ -123,27 +126,29 @@ namespace Niduc_Tramwaje
 
             map.Trams.Add(new Tram(map, 30, track33, track33.Stops.ElementAt(0), 0));
             //map.Trams.Add(new Tram(map, 15, track33, track33.Stops[0], 4));
-            map.Trams.Add(new Tram(map, 30, track33, track33.Stops.ElementAt(0), 120));
+            map.Trams.Add(new Tram(map, 30, track33, track33.Stops.Last(), 0));
             //map.Trams.Add(new Tram(map, 20, track33, track33.Stops[0], 13));
 
             Track track11 = new Track(11, new List<TrackPoint>() {
                 map.TrackPoints.ElementAt(10),
+                map.TrackPoints.ElementAt(4),
                 map.TrackPoints.ElementAt(5),
                 map.TrackPoints.ElementAt(6),
                 map.TrackPoints.ElementAt(11),
-                map.TrackPoints.ElementAt(12),
+                map.TrackPoints.ElementAt(12)
             });
             map.AddTrack(track11);
 
-            map.Trams.Add(new Tram(map, 30, track11, track11.Stops.ElementAt(0), 0));
+            //map.Trams.Add(new Tram(map, 30, track11, track11.Stops.ElementAt(0), 0));
             //map.Trams.Add(new Tram(map, 15, track11, track11.Stops[0], 4));
-            map.Trams.Add(new Tram(map, 30, track11, track11.Stops.ElementAt(0), 120));
+            //map.Trams.Add(new Tram(map, 30, track11, track11.Stops.ElementAt(0), 240));
             //map.Trams.Add(new Tram(map, 20, track11, track11.Stops[0], 13));
 
-            
 
-            
-            
+
+            foreach (TramStop stop in map.TramStops)
+                stop.AddPassengers(stop.AccessibleStops, 50);
+
         }
 
         public static Bitmap Display()

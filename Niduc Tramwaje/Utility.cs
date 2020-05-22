@@ -18,6 +18,8 @@ namespace Niduc_Tramwaje
         }
 
         public static int PingPong(int value, int min, int max) {
+            if (min >= max)
+                throw new Exception("Min musi być mniejsze od max!");
             while(value < min || value > max) {
                 if (value > max)
                     value = 2 * max - value;

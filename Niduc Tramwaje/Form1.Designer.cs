@@ -66,9 +66,9 @@ namespace Niduc_Tramwaje
             // 
             // trackBar1
             // 
-            this.trackBar1.Location = new System.Drawing.Point(682, 28);
+            this.trackBar1.Location = new System.Drawing.Point(658, 28);
             this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(134, 45);
+            this.trackBar1.Size = new System.Drawing.Size(186, 45);
             this.trackBar1.TabIndex = 3;
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
@@ -84,10 +84,10 @@ namespace Niduc_Tramwaje
             // 
             // trackBar2
             // 
-            this.trackBar2.Location = new System.Drawing.Point(682, 79);
-            this.trackBar2.Maximum = 200;
+            this.trackBar2.Location = new System.Drawing.Point(658, 79);
+            this.trackBar2.Maximum = 10000;
             this.trackBar2.Name = "trackBar2";
-            this.trackBar2.Size = new System.Drawing.Size(134, 45);
+            this.trackBar2.Size = new System.Drawing.Size(186, 45);
             this.trackBar2.TabIndex = 5;
             this.trackBar2.Scroll += new System.EventHandler(this.trackBar2_Scroll);
             // 
