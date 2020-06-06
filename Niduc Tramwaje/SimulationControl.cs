@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using Niduc_Tramwaje.Properties;
 
 namespace Niduc_Tramwaje
 {
@@ -121,12 +122,22 @@ namespace Niduc_Tramwaje
             foreach (TrackSerializable ts in linie)
             {
                 Track t = new Track(ts.numer);
-                foreach (TramStopSerializable tss in przystanki)
+                //foreach (TramStopSerializable tss in przystanki)
                 {
-                    TramStop tr = new TramStop(tss.Name, new Vector2(tss.X, tss.Y));
-                    t.AddTrackPoint(tr);
+                    foreach (TramStop trst in map.TramStops)
+                    {
+                        if (/*trst.getPosition().X == tss.X && trst.getPosition().Y == tss.Y && */
+                            linie.Where(x => x.numer == ts.numer).ToList()[0].przystanki.Where(x => x.X == trst.getPosition().X).ToList().Count > 0
+                            && linie.Where(x => x.numer == ts.numer).ToList()[0].przystanki.Where(x => x.Y == trst.getPosition().Y).ToList().Count > 0)
+                        {
+                            //TramStop tr = new TramStop(tss.Name, new Vector2(tss.X, tss.Y));
+                            t.AddTrackPoint(trst);
+                        }
+                    }
                 }
                 map.AddTrack(t);
+                map.Trams.Add(new Tram(map, 30, t, t.Stops.ElementAt(0), 0));
+                map.Trams.Add(new Tram(map, 30, t, t.Stops.Last(), 0));
             }
 
             //map.AddTrackPoint(new TramStop("1", new Vector2(50, 170)));
@@ -181,7 +192,8 @@ namespace Niduc_Tramwaje
 
         public static Bitmap Display()
         {
-            g.FillRectangle(brush_white, 0, 0, b.Width, b.Height);
+            //g.FillRectangle(brush_white, 0, 0, b.Width, b.Height);
+            g.DrawImage(Resources.Wrocław, 0, 0);
 
             if (map == null) return b;
 
