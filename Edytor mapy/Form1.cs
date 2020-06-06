@@ -213,13 +213,28 @@ namespace Edytor_mapy
                 }
                 usuwanie_przystanku_z_linii = false;
             }
-            else if (usuwanie_linii) 
-            {
-                int numer = Convert.ToInt32(Interaction.InputBox("Numer linii"));
-                usuwanie_linii = false;
-            }
+            //else if (usuwanie_linii) 
+            //{
+            //    int numer = Convert.ToInt32(Interaction.InputBox("Numer linii"));
+            //    TrackSerializable ln = null;
+            //    foreach (TrackSerializable ts in linie)
+            //    {
+            //        if(ts.numer == numer)
+            //        {
+            //            ln = ts;
+            //            break;
+            //        }
+            //    }
+            //    if(ln != null)
+            //    {
+            //        linie.Remove(ln);
+            //    }
+            //    picMap.Image = RysujMapę();
+            //    usuwanie_linii = false;
+            //}
 
             picMap.Image = RysujMapę();
+
         }
 
         private void btnEdytujPrzystanek_Click(object sender, EventArgs e)
@@ -269,13 +284,21 @@ namespace Edytor_mapy
 
         private void btnUsuńLinię_Click(object sender, EventArgs e)
         {
-            dodawanie_przystanku = false;
-            edytowanie_przystanku = false;
-            edytowanie_przystanku_2 = false;
-            usuwanie_przystanku = false;
-            dodawanie_przystanku_do_linii = false;
-            usuwanie_przystanku_z_linii = false;
-            usuwanie_linii = true;
+            int numer = Convert.ToInt32(Interaction.InputBox("Numer linii"));
+            TrackSerializable ln = null;
+            foreach (TrackSerializable ts in linie)
+            {
+                if (ts.numer == numer)
+                {
+                    ln = ts;
+                    break;
+                }
+            }
+            if (ln != null)
+            {
+                linie.Remove(ln);
+            }
+            picMap.Image = RysujMapę();
         }
 
         private void btnZapiszDoPliku_Click(object sender, EventArgs e)
