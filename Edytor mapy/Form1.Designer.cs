@@ -43,9 +43,10 @@
             // 
             // picMap
             // 
-            this.picMap.Location = new System.Drawing.Point(12, 56);
+            this.picMap.Location = new System.Drawing.Point(16, 69);
+            this.picMap.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.picMap.Name = "picMap";
-            this.picMap.Size = new System.Drawing.Size(640, 480);
+            this.picMap.Size = new System.Drawing.Size(853, 591);
             this.picMap.TabIndex = 1;
             this.picMap.TabStop = false;
             this.picMap.Click += new System.EventHandler(this.picMap_Click);
@@ -56,17 +57,19 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(57, 14);
+            this.label1.Location = new System.Drawing.Point(76, 17);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(28, 13);
+            this.label1.Size = new System.Drawing.Size(36, 17);
             this.label1.TabIndex = 2;
             this.label1.Text = "Test";
             // 
             // btnDodajPrzystanek
             // 
-            this.btnDodajPrzystanek.Location = new System.Drawing.Point(712, 68);
+            this.btnDodajPrzystanek.Location = new System.Drawing.Point(949, 84);
+            this.btnDodajPrzystanek.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnDodajPrzystanek.Name = "btnDodajPrzystanek";
-            this.btnDodajPrzystanek.Size = new System.Drawing.Size(125, 23);
+            this.btnDodajPrzystanek.Size = new System.Drawing.Size(211, 28);
             this.btnDodajPrzystanek.TabIndex = 3;
             this.btnDodajPrzystanek.Text = "Dodaj przystanek";
             this.btnDodajPrzystanek.UseVisualStyleBackColor = true;
@@ -74,9 +77,10 @@
             // 
             // btnEdytujPrzystanek
             // 
-            this.btnEdytujPrzystanek.Location = new System.Drawing.Point(712, 97);
+            this.btnEdytujPrzystanek.Location = new System.Drawing.Point(949, 119);
+            this.btnEdytujPrzystanek.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnEdytujPrzystanek.Name = "btnEdytujPrzystanek";
-            this.btnEdytujPrzystanek.Size = new System.Drawing.Size(125, 23);
+            this.btnEdytujPrzystanek.Size = new System.Drawing.Size(211, 28);
             this.btnEdytujPrzystanek.TabIndex = 3;
             this.btnEdytujPrzystanek.Text = "Edytuj przystanek";
             this.btnEdytujPrzystanek.UseVisualStyleBackColor = true;
@@ -84,9 +88,10 @@
             // 
             // btnUsuńPrzystanek
             // 
-            this.btnUsuńPrzystanek.Location = new System.Drawing.Point(712, 126);
+            this.btnUsuńPrzystanek.Location = new System.Drawing.Point(949, 155);
+            this.btnUsuńPrzystanek.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnUsuńPrzystanek.Name = "btnUsuńPrzystanek";
-            this.btnUsuńPrzystanek.Size = new System.Drawing.Size(125, 23);
+            this.btnUsuńPrzystanek.Size = new System.Drawing.Size(211, 28);
             this.btnUsuńPrzystanek.TabIndex = 4;
             this.btnUsuńPrzystanek.Text = "Usuń przystanek";
             this.btnUsuńPrzystanek.UseVisualStyleBackColor = true;
@@ -94,10 +99,10 @@
             // 
             // btnDodajPrzystanekDoLinii
             // 
-            this.btnDodajPrzystanekDoLinii.Location = new System.Drawing.Point(712, 154);
-            this.btnDodajPrzystanekDoLinii.Margin = new System.Windows.Forms.Padding(2);
+            this.btnDodajPrzystanekDoLinii.Location = new System.Drawing.Point(949, 190);
+            this.btnDodajPrzystanekDoLinii.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnDodajPrzystanekDoLinii.Name = "btnDodajPrzystanekDoLinii";
-            this.btnDodajPrzystanekDoLinii.Size = new System.Drawing.Size(158, 23);
+            this.btnDodajPrzystanekDoLinii.Size = new System.Drawing.Size(211, 28);
             this.btnDodajPrzystanekDoLinii.TabIndex = 5;
             this.btnDodajPrzystanekDoLinii.Text = "Dodaj przystanek do linii";
             this.btnDodajPrzystanekDoLinii.UseVisualStyleBackColor = true;
@@ -105,10 +110,10 @@
             // 
             // btnUsuńLinię
             // 
-            this.btnUsuńLinię.Location = new System.Drawing.Point(712, 208);
-            this.btnUsuńLinię.Margin = new System.Windows.Forms.Padding(2);
+            this.btnUsuńLinię.Location = new System.Drawing.Point(949, 256);
+            this.btnUsuńLinię.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnUsuńLinię.Name = "btnUsuńLinię";
-            this.btnUsuńLinię.Size = new System.Drawing.Size(158, 23);
+            this.btnUsuńLinię.Size = new System.Drawing.Size(211, 28);
             this.btnUsuńLinię.TabIndex = 6;
             this.btnUsuńLinię.Text = "Usuń linię";
             this.btnUsuńLinię.UseVisualStyleBackColor = true;
@@ -116,10 +121,10 @@
             // 
             // btnUsuńPrzystanekZLinii
             // 
-            this.btnUsuńPrzystanekZLinii.Location = new System.Drawing.Point(712, 181);
-            this.btnUsuńPrzystanekZLinii.Margin = new System.Windows.Forms.Padding(2);
+            this.btnUsuńPrzystanekZLinii.Location = new System.Drawing.Point(949, 223);
+            this.btnUsuńPrzystanekZLinii.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnUsuńPrzystanekZLinii.Name = "btnUsuńPrzystanekZLinii";
-            this.btnUsuńPrzystanekZLinii.Size = new System.Drawing.Size(158, 23);
+            this.btnUsuńPrzystanekZLinii.Size = new System.Drawing.Size(211, 28);
             this.btnUsuńPrzystanekZLinii.TabIndex = 7;
             this.btnUsuńPrzystanekZLinii.Text = "Usuń przystanek z linii";
             this.btnUsuńPrzystanekZLinii.UseVisualStyleBackColor = true;
@@ -127,10 +132,10 @@
             // 
             // btnZapiszDoPliku
             // 
-            this.btnZapiszDoPliku.Location = new System.Drawing.Point(712, 235);
-            this.btnZapiszDoPliku.Margin = new System.Windows.Forms.Padding(2);
+            this.btnZapiszDoPliku.Location = new System.Drawing.Point(949, 289);
+            this.btnZapiszDoPliku.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnZapiszDoPliku.Name = "btnZapiszDoPliku";
-            this.btnZapiszDoPliku.Size = new System.Drawing.Size(125, 23);
+            this.btnZapiszDoPliku.Size = new System.Drawing.Size(211, 28);
             this.btnZapiszDoPliku.TabIndex = 8;
             this.btnZapiszDoPliku.Text = "Zapisz do pliku";
             this.btnZapiszDoPliku.UseVisualStyleBackColor = true;
@@ -138,10 +143,10 @@
             // 
             // btnWczytajZPliku
             // 
-            this.btnWczytajZPliku.Location = new System.Drawing.Point(712, 262);
-            this.btnWczytajZPliku.Margin = new System.Windows.Forms.Padding(2);
+            this.btnWczytajZPliku.Location = new System.Drawing.Point(949, 322);
+            this.btnWczytajZPliku.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnWczytajZPliku.Name = "btnWczytajZPliku";
-            this.btnWczytajZPliku.Size = new System.Drawing.Size(125, 23);
+            this.btnWczytajZPliku.Size = new System.Drawing.Size(211, 28);
             this.btnWczytajZPliku.TabIndex = 9;
             this.btnWczytajZPliku.Text = "Wczytaj z pliku";
             this.btnWczytajZPliku.UseVisualStyleBackColor = true;
@@ -149,9 +154,9 @@
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(902, 572);
+            this.ClientSize = new System.Drawing.Size(1203, 704);
             this.Controls.Add(this.btnWczytajZPliku);
             this.Controls.Add(this.btnZapiszDoPliku);
             this.Controls.Add(this.btnUsuńPrzystanekZLinii);
@@ -162,6 +167,7 @@
             this.Controls.Add(this.btnDodajPrzystanek);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.picMap);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);

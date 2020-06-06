@@ -213,26 +213,6 @@ namespace Edytor_mapy
                 }
                 usuwanie_przystanku_z_linii = false;
             }
-            //else if (usuwanie_linii) 
-            //{
-            //    int numer = Convert.ToInt32(Interaction.InputBox("Numer linii"));
-            //    TrackSerializable ln = null;
-            //    foreach (TrackSerializable ts in linie)
-            //    {
-            //        if(ts.numer == numer)
-            //        {
-            //            ln = ts;
-            //            break;
-            //        }
-            //    }
-            //    if(ln != null)
-            //    {
-            //        linie.Remove(ln);
-            //    }
-            //    picMap.Image = RysujMapę();
-            //    usuwanie_linii = false;
-            //}
-
             picMap.Image = RysujMapę();
 
         }
