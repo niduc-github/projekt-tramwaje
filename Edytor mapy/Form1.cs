@@ -287,6 +287,10 @@ namespace Edytor_mapy
             Stream stream = new FileStream("przystanki.bin", FileMode.Create, FileAccess.Write, FileShare.None);
             formatter.Serialize(stream, przystanki);
             stream.Close();
+
+            Stream stream2 = new FileStream("linie.bin", FileMode.Create, FileAccess.Write, FileShare.None);
+            formatter.Serialize(stream2, linie);
+            stream2.Close();
         }
 
         private void btnWczytajZPliku_Click(object sender, EventArgs e)
