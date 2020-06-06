@@ -198,12 +198,24 @@ namespace Edytor_mapy
             }
             else if (usuwanie_przystanku_z_linii)
             {
-
+                foreach (TramStopSerializable ts in przystanki)
+                {
+                    if ((abs(ts.X - e.X) < 10 && abs(ts.Y - e.Y) < 10))
+                    {
+                        wybrany_przystanek = ts;
+                        foreach (TrackSerializable ln in linie)
+                        {
+                            ln.przystanki.Remove(wybrany_przystanek);
+                        }
+                        picMap.Image = RysujMapę();
+                        break;
+                    }
+                }
                 usuwanie_przystanku_z_linii = false;
             }
             else if (usuwanie_linii) 
             {
-
+                int numer = Convert.ToInt32(Interaction.InputBox("Numer linii"));
                 usuwanie_linii = false;
             }
 
