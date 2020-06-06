@@ -95,7 +95,7 @@
             // btnUtwórzLinię
             // 
             this.btnUtwórzLinię.Location = new System.Drawing.Point(712, 154);
-            this.btnUtwórzLinię.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnUtwórzLinię.Margin = new System.Windows.Forms.Padding(2);
             this.btnUtwórzLinię.Name = "btnUtwórzLinię";
             this.btnUtwórzLinię.Size = new System.Drawing.Size(125, 23);
             this.btnUtwórzLinię.TabIndex = 5;
@@ -106,7 +106,7 @@
             // btnUsuńLinię
             // 
             this.btnUsuńLinię.Location = new System.Drawing.Point(712, 208);
-            this.btnUsuńLinię.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnUsuńLinię.Margin = new System.Windows.Forms.Padding(2);
             this.btnUsuńLinię.Name = "btnUsuńLinię";
             this.btnUsuńLinię.Size = new System.Drawing.Size(125, 23);
             this.btnUsuńLinię.TabIndex = 6;
@@ -117,7 +117,7 @@
             // btnEdytujLinię
             // 
             this.btnEdytujLinię.Location = new System.Drawing.Point(712, 181);
-            this.btnEdytujLinię.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnEdytujLinię.Margin = new System.Windows.Forms.Padding(2);
             this.btnEdytujLinię.Name = "btnEdytujLinię";
             this.btnEdytujLinię.Size = new System.Drawing.Size(125, 23);
             this.btnEdytujLinię.TabIndex = 7;
@@ -128,7 +128,7 @@
             // btnZapiszDoPliku
             // 
             this.btnZapiszDoPliku.Location = new System.Drawing.Point(712, 235);
-            this.btnZapiszDoPliku.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnZapiszDoPliku.Margin = new System.Windows.Forms.Padding(2);
             this.btnZapiszDoPliku.Name = "btnZapiszDoPliku";
             this.btnZapiszDoPliku.Size = new System.Drawing.Size(125, 23);
             this.btnZapiszDoPliku.TabIndex = 8;
@@ -139,12 +139,13 @@
             // btnWczytajZPliku
             // 
             this.btnWczytajZPliku.Location = new System.Drawing.Point(712, 262);
-            this.btnWczytajZPliku.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnWczytajZPliku.Margin = new System.Windows.Forms.Padding(2);
             this.btnWczytajZPliku.Name = "btnWczytajZPliku";
             this.btnWczytajZPliku.Size = new System.Drawing.Size(125, 23);
             this.btnWczytajZPliku.TabIndex = 9;
             this.btnWczytajZPliku.Text = "Wczytaj z pliku";
             this.btnWczytajZPliku.UseVisualStyleBackColor = true;
+            this.btnWczytajZPliku.Click += new System.EventHandler(this.btnWczytajZPliku_Click);
             // 
             // Form1
             // 

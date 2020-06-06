@@ -17,6 +17,8 @@ using System.IO;
 
 namespace Edytor_mapy
 {
+    
+
     public partial class Form1 : Form
     {
         public Form1()
@@ -43,16 +45,18 @@ namespace Edytor_mapy
         int click_y = 0;
         #endregion
         #region Zmienne_do_tworzenia_mapy
-        Map map = new Map();
-        TramStop wybrany_przystanek;
+        //Map map = new Map();
+        //TramStop wybrany_przystanek;
+        List<TramStopSerializable> przystanki = new List<TramStopSerializable>();
+        TramStopSerializable wybrany_przystanek;
         #endregion
 
         Bitmap RysujMapę()
         {
             Bitmap b = new Bitmap(Resources.Wrocław);
-            foreach(TramStop ts in map.TramStops)
+            foreach(TramStopSerializable ts in przystanki)
             {
-                Graphics.FromImage(b).DrawRectangle(new Pen(Color.Black), ts.getPosition().X - 5, ts.getPosition().Y - 5, 11, 11);
+                Graphics.FromImage(b).DrawRectangle(new Pen(Color.Black), ts.X - 5, ts.Y - 5, 11, 11);
             }
             return b;
         }
@@ -109,7 +113,8 @@ namespace Edytor_mapy
 
             if (dodawanie_przystanku)
             {
-                map.AddTrackPoint(new TramStop(Interaction.InputBox("Nazwa przystanku"), new System.Numerics.Vector2(e.X, e.Y)));
+                przystanki.Add(new TramStopSerializable() { Name = Interaction.InputBox("Nazwa przystanku"), X = e.X, Y = e.Y });
+                //map.AddTrackPoint(new TramStop(Interaction.InputBox("Nazwa przystanku"), new System.Numerics.Vector2(e.X, e.Y)));
                 Graphics.FromImage(img).DrawRectangle(new Pen(Color.Black), e.X - 5, e.Y - 5, 11, 11);
                 picMap.Image = img;
 
@@ -117,9 +122,9 @@ namespace Edytor_mapy
             }
             else if (edytowanie_przystanku)
             {
-                foreach (TramStop ts in map.TramStops)
+                foreach (TramStopSerializable ts in przystanki)
                 {
-                    if ((abs(ts.getPosition().X - e.X) < 10 && abs(ts.getPosition().Y - e.Y) < 10))
+                    if ((abs(ts.X - e.X) < 10 && abs(ts.Y - e.Y) < 10))
                     {
                         wybrany_przystanek = ts;
                         edytowanie_przystanku_2 = true;
@@ -130,8 +135,10 @@ namespace Edytor_mapy
             }
             else if (edytowanie_przystanku_2)
             {
-                wybrany_przystanek.setPosition(new System.Numerics.Vector2(e.X, e.Y));
-                wybrany_przystanek.setTramStopName(Interaction.InputBox("Nazwa przystanku"));
+                wybrany_przystanek.X = e.X;
+                wybrany_przystanek.Y = e.Y;
+                //wybrany_przystanek.setPosition(new System.Numerics.Vector2(e.X, e.Y));
+                wybrany_przystanek.Name = (Interaction.InputBox("Nazwa przystanku"));
                 edytowanie_przystanku_2 = false;
             }
             else if (usuwanie_przystanku)
@@ -217,9 +224,18 @@ namespace Edytor_mapy
         private void btnZapiszDoPliku_Click(object sender, EventArgs e)
         {
             IFormatter formatter = new BinaryFormatter();
-            Stream stream = new FileStream("map.bin", FileMode.Create, FileAccess.Write, FileShare.None);
-            formatter.Serialize(stream, map);
+            Stream stream = new FileStream("przystanki.bin", FileMode.Create, FileAccess.Write, FileShare.None);
+            formatter.Serialize(stream, przystanki);
             stream.Close();
+        }
+
+        private void btnWczytajZPliku_Click(object sender, EventArgs e)
+        {
+            IFormatter formatter = new BinaryFormatter();
+            Stream stream = new FileStream("przystanki.bin", FileMode.Open, FileAccess.Read, FileShare.Read);
+            przystanki = (List<TramStopSerializable>)formatter.Deserialize(stream);
+            stream.Close();
+            picMap.Image = RysujMapę();
         }
     }
 }

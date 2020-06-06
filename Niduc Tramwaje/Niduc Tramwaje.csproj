@@ -64,6 +64,7 @@
     <Compile Include="Track.cs" />
     <Compile Include="Tram.cs" />
     <Compile Include="TramStop.cs" />
+    <Compile Include="TramStopSerializable.cs" />
     <Compile Include="Utility.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Niduc_Tramwaje
 {
-
-    interface IConnectable
+    [Serializable]
+    public class TramStopSerializable
     {
-        bool HasFreeConnection();
-        bool AddConnection(TrackPoint element);
-        void Connect(IConnectable element);  
+        public string Name;
+        public int X;
+        public int Y;
     }
 }
