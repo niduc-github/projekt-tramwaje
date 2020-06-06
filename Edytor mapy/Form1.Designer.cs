@@ -80,6 +80,7 @@
             this.btnEdytujPrzystanek.TabIndex = 3;
             this.btnEdytujPrzystanek.Text = "Edytuj przystanek";
             this.btnEdytujPrzystanek.UseVisualStyleBackColor = true;
+            this.btnEdytujPrzystanek.Click += new System.EventHandler(this.btnEdytujPrzystanek_Click);
             // 
             // btnUsuńPrzystanek
             // 
