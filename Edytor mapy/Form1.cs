@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Niduc_Tramwaje;
+using System.Reflection;
 
 namespace Edytor_mapy
 {
@@ -21,6 +23,11 @@ namespace Edytor_mapy
         private void Form1_Load(object sender, EventArgs e)
         {
             picMap.Image = Resources.Wrocław;
+        }
+
+        private void btnDodajPrzystanek_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Numerics;
 
 namespace Niduc_Tramwaje
 {
-    class Tram
+    public class Tram
     {
         private float speed;
         private Track track;

@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace Niduc_Tramwaje
 {
-    class TramStop : TrackPoint
+    public class TramStop : TrackPoint
     {
         private TrackPoint connection1, connection2;
         private HashSet<TramStop> accessibleStops;

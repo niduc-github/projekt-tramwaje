@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Niduc_Tramwaje
 {
-    class Track
+    public class Track
     {
         private int number;
         private List<TrackPoint> trackPoints;

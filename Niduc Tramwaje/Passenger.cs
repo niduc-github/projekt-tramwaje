@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Niduc_Tramwaje
 {
-    class Passenger
+    public class Passenger
     {
         private static Random random = new Random();
 

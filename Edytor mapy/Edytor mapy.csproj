@@ -83,5 +83,11 @@
   <ItemGroup>
     <None Include="Resources\Wrocław.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Niduc Tramwaje\Niduc Tramwaje.csproj">
+      <Project>{f448e05f-47ba-4ce8-bc81-4c876fae86bb}</Project>
+      <Name>Niduc Tramwaje</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

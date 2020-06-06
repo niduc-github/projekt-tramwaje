@@ -66,6 +66,7 @@
             this.btnDodajPrzystanek.TabIndex = 3;
             this.btnDodajPrzystanek.Text = "Dodaj przystanek";
             this.btnDodajPrzystanek.UseVisualStyleBackColor = true;
+            this.btnDodajPrzystanek.Click += new System.EventHandler(this.btnDodajPrzystanek_Click);
             // 
             // btnEdytujPrzystanek
             // 

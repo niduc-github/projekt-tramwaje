@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace Niduc_Tramwaje
 {
-    abstract class TrackPoint
+    public abstract class TrackPoint
     {
         protected Vector2 position;
 
