@@ -95,6 +95,7 @@
             this.btnUsuńPrzystanek.TabIndex = 4;
             this.btnUsuńPrzystanek.Text = "Usuń przystanek";
             this.btnUsuńPrzystanek.UseVisualStyleBackColor = true;
+            this.btnUsuńPrzystanek.Click += new System.EventHandler(this.btnUsuńPrzystanek_Click);
             // 
             // btnUtwórzLinię
             // 
@@ -105,6 +106,7 @@
             this.btnUtwórzLinię.TabIndex = 5;
             this.btnUtwórzLinię.Text = "Utwórz linię";
             this.btnUtwórzLinię.UseVisualStyleBackColor = true;
+            this.btnUtwórzLinię.Click += new System.EventHandler(this.btnUtwórzLinię_Click);
             // 
             // btnUsuńLinię
             // 
@@ -115,6 +117,7 @@
             this.btnUsuńLinię.TabIndex = 6;
             this.btnUsuńLinię.Text = "Usuń linię";
             this.btnUsuńLinię.UseVisualStyleBackColor = true;
+            this.btnUsuńLinię.Click += new System.EventHandler(this.btnUsuńLinię_Click);
             // 
             // btnEdytujLinię
             // 
@@ -125,6 +128,7 @@
             this.btnEdytujLinię.TabIndex = 7;
             this.btnEdytujLinię.Text = "Edytuj linię";
             this.btnEdytujLinię.UseVisualStyleBackColor = true;
+            this.btnEdytujLinię.Click += new System.EventHandler(this.btnEdytujLinię_Click);
             // 
             // btnZapiszDoPliku
             // 

@@ -67,7 +67,12 @@ namespace Edytor_mapy
         private void btnDodajPrzystanek_Click(object sender, EventArgs e)
         {
             dodawanie_przystanku = true;
-
+            edytowanie_przystanku = false;
+            edytowanie_przystanku_2 = false;
+            usuwanie_przystanku = false;
+            tworzenie_linii = false;
+            edytowanie_linii = false;
+            usuwanie_linii = false;
 
         }
 
@@ -125,7 +130,7 @@ namespace Edytor_mapy
             else if (edytowanie_przystanku_2)
             {
                 wybrany_przystanek.setPosition(new System.Numerics.Vector2(e.X, e.Y));
-
+                wybrany_przystanek.setTramStopName(Interaction.InputBox("Nazwa przystanku"));
                 edytowanie_przystanku_2 = false;
             }
             else if (usuwanie_przystanku)
@@ -154,12 +159,58 @@ namespace Edytor_mapy
 
         private void btnEdytujPrzystanek_Click(object sender, EventArgs e)
         {
+            dodawanie_przystanku = false;
             edytowanie_przystanku = true;
+            edytowanie_przystanku_2 = false;
+            usuwanie_przystanku = false;
+            tworzenie_linii = false;
+            edytowanie_linii = false;
+            usuwanie_linii = false;
+
         }
 
-        private void btnEdytujPrzystanek_Click(object sender, EventArgs e)
+        private void btnUsuńPrzystanek_Click(object sender, EventArgs e)
         {
-            
+            dodawanie_przystanku = false;
+            edytowanie_przystanku = false;
+            edytowanie_przystanku_2 = false;
+            usuwanie_przystanku = true;
+            tworzenie_linii = false;
+            edytowanie_linii = false;
+            usuwanie_linii = false;
+        }
+
+        private void btnUtwórzLinię_Click(object sender, EventArgs e)
+        {
+            dodawanie_przystanku = false;
+            edytowanie_przystanku = false;
+            edytowanie_przystanku_2 = false;
+            usuwanie_przystanku = false;
+            tworzenie_linii = true;
+            edytowanie_linii = false;
+            usuwanie_linii = false;
+        }
+
+        private void btnEdytujLinię_Click(object sender, EventArgs e)
+        {
+            dodawanie_przystanku = false;
+            edytowanie_przystanku = false;
+            edytowanie_przystanku_2 = false;
+            usuwanie_przystanku = false;
+            tworzenie_linii = false;
+            edytowanie_linii = true;
+            usuwanie_linii = false;
+        }
+
+        private void btnUsuńLinię_Click(object sender, EventArgs e)
+        {
+            dodawanie_przystanku = false;
+            edytowanie_przystanku = false;
+            edytowanie_przystanku_2 = false;
+            usuwanie_przystanku = false;
+            tworzenie_linii = false;
+            edytowanie_linii = false;
+            usuwanie_linii = true;
         }
     }
 }
