@@ -31,8 +31,8 @@ namespace Edytor_mapy
         bool edytowanie_przystanku = false;
         bool edytowanie_przystanku_2 = false;
         bool usuwanie_przystanku = false;
-        bool tworzenie_linii = false;
-        bool edytowanie_linii = false;
+        bool dodawanie_przystanku_do_linii = false;
+        bool usuwanie_przystanku_z_linii = false;
         bool usuwanie_linii = false;
 
 
@@ -48,6 +48,7 @@ namespace Edytor_mapy
         //Map map = new Map();
         //TramStop wybrany_przystanek;
         List<TramStopSerializable> przystanki = new List<TramStopSerializable>();
+        List<TrackSerializable> linie = new List<TrackSerializable>();
         TramStopSerializable wybrany_przystanek;
         #endregion
 
@@ -57,6 +58,13 @@ namespace Edytor_mapy
             foreach(TramStopSerializable ts in przystanki)
             {
                 Graphics.FromImage(b).DrawRectangle(new Pen(Color.Black), ts.X - 5, ts.Y - 5, 11, 11);
+            }
+            foreach(TrackSerializable tr in linie)
+            {
+                for (int i = 0; i < tr.przystanki.Count - 1; i++)
+                {
+                    Graphics.FromImage(b).DrawLine(new Pen(Color.Black), tr.przystanki[i].X, tr.przystanki[i].Y, tr.przystanki[i + 1].X, tr.przystanki[i + 1].Y);
+                }
             }
             return b;
         }
@@ -78,8 +86,8 @@ namespace Edytor_mapy
             edytowanie_przystanku = false;
             edytowanie_przystanku_2 = false;
             usuwanie_przystanku = false;
-            tworzenie_linii = false;
-            edytowanie_linii = false;
+            dodawanie_przystanku_do_linii = false;
+            usuwanie_przystanku_z_linii = false;
             usuwanie_linii = false;
 
         }
@@ -114,7 +122,6 @@ namespace Edytor_mapy
             if (dodawanie_przystanku)
             {
                 przystanki.Add(new TramStopSerializable() { Name = Interaction.InputBox("Nazwa przystanku"), X = e.X, Y = e.Y });
-                //map.AddTrackPoint(new TramStop(Interaction.InputBox("Nazwa przystanku"), new System.Numerics.Vector2(e.X, e.Y)));
                 Graphics.FromImage(img).DrawRectangle(new Pen(Color.Black), e.X - 5, e.Y - 5, 11, 11);
                 picMap.Image = img;
 
@@ -137,7 +144,6 @@ namespace Edytor_mapy
             {
                 wybrany_przystanek.X = e.X;
                 wybrany_przystanek.Y = e.Y;
-                //wybrany_przystanek.setPosition(new System.Numerics.Vector2(e.X, e.Y));
                 wybrany_przystanek.Name = (Interaction.InputBox("Nazwa przystanku"));
                 edytowanie_przystanku_2 = false;
             }
@@ -146,15 +152,40 @@ namespace Edytor_mapy
 
                 usuwanie_przystanku = false;
             }
-            else if (tworzenie_linii)
+            else if (dodawanie_przystanku_do_linii)
             {
+                foreach (TramStopSerializable ts in przystanki)
+                {
+                    if ((abs(ts.X - e.X) < 10 && abs(ts.Y - e.Y) < 10))
+                    {
+                        int numer = Convert.ToInt32(Interaction.InputBox("Numer linii"));
+                        bool czy_istnieje = false;
+                        for (int i = 0; i < linie.Count; i++)
+                        {
+                            if (linie[i].numer == numer)
+                            {
+                                czy_istnieje = true;
+                                linie[i].przystanki.Add(ts);
+                            }
+                        }
+                        if (!czy_istnieje)
+                        {
+                            TrackSerializable tr = new TrackSerializable();
+                            tr.numer = numer;
+                            tr.przystanki = new List<TramStopSerializable>();
+                            tr.przystanki.Add(ts);
+                            linie.Add(tr);
+                        }
+                        break;
+                    }
+                }
 
-                tworzenie_linii = false;
+                dodawanie_przystanku_do_linii = false;
             }
-            else if (edytowanie_linii)
+            else if (usuwanie_przystanku_z_linii)
             {
 
-                edytowanie_linii = false;
+                usuwanie_przystanku_z_linii = false;
             }
             else if (usuwanie_linii) 
             {
@@ -171,8 +202,8 @@ namespace Edytor_mapy
             edytowanie_przystanku = true;
             edytowanie_przystanku_2 = false;
             usuwanie_przystanku = false;
-            tworzenie_linii = false;
-            edytowanie_linii = false;
+            dodawanie_przystanku_do_linii = false;
+            usuwanie_przystanku_z_linii = false;
             usuwanie_linii = false;
 
         }
@@ -183,30 +214,30 @@ namespace Edytor_mapy
             edytowanie_przystanku = false;
             edytowanie_przystanku_2 = false;
             usuwanie_przystanku = true;
-            tworzenie_linii = false;
-            edytowanie_linii = false;
+            dodawanie_przystanku_do_linii = false;
+            usuwanie_przystanku_z_linii = false;
             usuwanie_linii = false;
         }
 
-        private void btnUtwórzLinię_Click(object sender, EventArgs e)
+        private void btnDodajPrzystanekDoLinii_Click(object sender, EventArgs e)
         {
             dodawanie_przystanku = false;
             edytowanie_przystanku = false;
             edytowanie_przystanku_2 = false;
             usuwanie_przystanku = false;
-            tworzenie_linii = true;
-            edytowanie_linii = false;
+            dodawanie_przystanku_do_linii = true;
+            usuwanie_przystanku_z_linii = false;
             usuwanie_linii = false;
         }
 
-        private void btnEdytujLinię_Click(object sender, EventArgs e)
+        private void btnUsuńPrzystanekZLinii_Click(object sender, EventArgs e)
         {
             dodawanie_przystanku = false;
             edytowanie_przystanku = false;
             edytowanie_przystanku_2 = false;
             usuwanie_przystanku = false;
-            tworzenie_linii = false;
-            edytowanie_linii = true;
+            dodawanie_przystanku_do_linii = false;
+            usuwanie_przystanku_z_linii = true;
             usuwanie_linii = false;
         }
 
@@ -216,8 +247,8 @@ namespace Edytor_mapy
             edytowanie_przystanku = false;
             edytowanie_przystanku_2 = false;
             usuwanie_przystanku = false;
-            tworzenie_linii = false;
-            edytowanie_linii = false;
+            dodawanie_przystanku_do_linii = false;
+            usuwanie_przystanku_z_linii = false;
             usuwanie_linii = true;
         }
 
@@ -237,5 +268,7 @@ namespace Edytor_mapy
             stream.Close();
             picMap.Image = RysujMapę();
         }
+
+        
     }
 }

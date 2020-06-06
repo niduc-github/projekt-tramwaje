@@ -33,9 +33,9 @@
             this.btnDodajPrzystanek = new System.Windows.Forms.Button();
             this.btnEdytujPrzystanek = new System.Windows.Forms.Button();
             this.btnUsuńPrzystanek = new System.Windows.Forms.Button();
-            this.btnUtwórzLinię = new System.Windows.Forms.Button();
+            this.btnDodajPrzystanekDoLinii = new System.Windows.Forms.Button();
             this.btnUsuńLinię = new System.Windows.Forms.Button();
-            this.btnEdytujLinię = new System.Windows.Forms.Button();
+            this.btnUsuńPrzystanekZLinii = new System.Windows.Forms.Button();
             this.btnZapiszDoPliku = new System.Windows.Forms.Button();
             this.btnWczytajZPliku = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picMap)).BeginInit();
@@ -92,38 +92,38 @@
             this.btnUsuńPrzystanek.UseVisualStyleBackColor = true;
             this.btnUsuńPrzystanek.Click += new System.EventHandler(this.btnUsuńPrzystanek_Click);
             // 
-            // btnUtwórzLinię
+            // btnDodajPrzystanekDoLinii
             // 
-            this.btnUtwórzLinię.Location = new System.Drawing.Point(712, 154);
-            this.btnUtwórzLinię.Margin = new System.Windows.Forms.Padding(2);
-            this.btnUtwórzLinię.Name = "btnUtwórzLinię";
-            this.btnUtwórzLinię.Size = new System.Drawing.Size(125, 23);
-            this.btnUtwórzLinię.TabIndex = 5;
-            this.btnUtwórzLinię.Text = "Utwórz linię";
-            this.btnUtwórzLinię.UseVisualStyleBackColor = true;
-            this.btnUtwórzLinię.Click += new System.EventHandler(this.btnUtwórzLinię_Click);
+            this.btnDodajPrzystanekDoLinii.Location = new System.Drawing.Point(712, 154);
+            this.btnDodajPrzystanekDoLinii.Margin = new System.Windows.Forms.Padding(2);
+            this.btnDodajPrzystanekDoLinii.Name = "btnDodajPrzystanekDoLinii";
+            this.btnDodajPrzystanekDoLinii.Size = new System.Drawing.Size(158, 23);
+            this.btnDodajPrzystanekDoLinii.TabIndex = 5;
+            this.btnDodajPrzystanekDoLinii.Text = "Dodaj przystanek do linii";
+            this.btnDodajPrzystanekDoLinii.UseVisualStyleBackColor = true;
+            this.btnDodajPrzystanekDoLinii.Click += new System.EventHandler(this.btnDodajPrzystanekDoLinii_Click);
             // 
             // btnUsuńLinię
             // 
             this.btnUsuńLinię.Location = new System.Drawing.Point(712, 208);
             this.btnUsuńLinię.Margin = new System.Windows.Forms.Padding(2);
             this.btnUsuńLinię.Name = "btnUsuńLinię";
-            this.btnUsuńLinię.Size = new System.Drawing.Size(125, 23);
+            this.btnUsuńLinię.Size = new System.Drawing.Size(158, 23);
             this.btnUsuńLinię.TabIndex = 6;
             this.btnUsuńLinię.Text = "Usuń linię";
             this.btnUsuńLinię.UseVisualStyleBackColor = true;
             this.btnUsuńLinię.Click += new System.EventHandler(this.btnUsuńLinię_Click);
             // 
-            // btnEdytujLinię
+            // btnUsuńPrzystanekZLinii
             // 
-            this.btnEdytujLinię.Location = new System.Drawing.Point(712, 181);
-            this.btnEdytujLinię.Margin = new System.Windows.Forms.Padding(2);
-            this.btnEdytujLinię.Name = "btnEdytujLinię";
-            this.btnEdytujLinię.Size = new System.Drawing.Size(125, 23);
-            this.btnEdytujLinię.TabIndex = 7;
-            this.btnEdytujLinię.Text = "Edytuj linię";
-            this.btnEdytujLinię.UseVisualStyleBackColor = true;
-            this.btnEdytujLinię.Click += new System.EventHandler(this.btnEdytujLinię_Click);
+            this.btnUsuńPrzystanekZLinii.Location = new System.Drawing.Point(712, 181);
+            this.btnUsuńPrzystanekZLinii.Margin = new System.Windows.Forms.Padding(2);
+            this.btnUsuńPrzystanekZLinii.Name = "btnUsuńPrzystanekZLinii";
+            this.btnUsuńPrzystanekZLinii.Size = new System.Drawing.Size(158, 23);
+            this.btnUsuńPrzystanekZLinii.TabIndex = 7;
+            this.btnUsuńPrzystanekZLinii.Text = "Usuń przystanek z linii";
+            this.btnUsuńPrzystanekZLinii.UseVisualStyleBackColor = true;
+            this.btnUsuńPrzystanekZLinii.Click += new System.EventHandler(this.btnUsuńPrzystanekZLinii_Click);
             // 
             // btnZapiszDoPliku
             // 
@@ -154,9 +154,9 @@
             this.ClientSize = new System.Drawing.Size(902, 572);
             this.Controls.Add(this.btnWczytajZPliku);
             this.Controls.Add(this.btnZapiszDoPliku);
-            this.Controls.Add(this.btnEdytujLinię);
+            this.Controls.Add(this.btnUsuńPrzystanekZLinii);
             this.Controls.Add(this.btnUsuńLinię);
-            this.Controls.Add(this.btnUtwórzLinię);
+            this.Controls.Add(this.btnDodajPrzystanekDoLinii);
             this.Controls.Add(this.btnUsuńPrzystanek);
             this.Controls.Add(this.btnEdytujPrzystanek);
             this.Controls.Add(this.btnDodajPrzystanek);
@@ -178,9 +178,9 @@
         private System.Windows.Forms.Button btnDodajPrzystanek;
         private System.Windows.Forms.Button btnEdytujPrzystanek;
         private System.Windows.Forms.Button btnUsuńPrzystanek;
-        private System.Windows.Forms.Button btnUtwórzLinię;
+        private System.Windows.Forms.Button btnDodajPrzystanekDoLinii;
         private System.Windows.Forms.Button btnUsuńLinię;
-        private System.Windows.Forms.Button btnEdytujLinię;
+        private System.Windows.Forms.Button btnUsuńPrzystanekZLinii;
         private System.Windows.Forms.Button btnZapiszDoPliku;
         private System.Windows.Forms.Button btnWczytajZPliku;
     }
