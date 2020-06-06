@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Niduc_Tramwaje
 {
+    [Serializable]
     public class Track
     {
         private int number;

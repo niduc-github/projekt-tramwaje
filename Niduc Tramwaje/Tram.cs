@@ -8,6 +8,7 @@ using System.Numerics;
 
 namespace Niduc_Tramwaje
 {
+    [Serializable]
     public class Tram
     {
         private float speed;

@@ -9,6 +9,7 @@ using System.Windows.Forms;
 
 namespace Niduc_Tramwaje
 {
+    [Serializable]
     public class TramStop : TrackPoint
     {
         private TrackPoint connection1, connection2;

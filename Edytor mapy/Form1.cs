@@ -10,6 +10,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Niduc_Tramwaje;
 using Microsoft.VisualBasic;
+using System.Globalization;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace Edytor_mapy
 {
@@ -86,13 +90,10 @@ namespace Edytor_mapy
             p_x = e.X;
             p_y = e.Y;
 
-            //Bitmap b = new Bitmap(img);
-            //Graphics g = Graphics.FromImage(b);
             Graphics g = picMap.CreateGraphics();
             picMap.Refresh();
             g.DrawLine(new Pen(Color.Black), 0, p_y, 639, p_y);
             g.DrawLine(new Pen(Color.Black), p_x, 0, p_x, 479);
-            //picMap.Image = b;
             g.Dispose();
         }
 
@@ -211,6 +212,14 @@ namespace Edytor_mapy
             tworzenie_linii = false;
             edytowanie_linii = false;
             usuwanie_linii = true;
+        }
+
+        private void btnZapiszDoPliku_Click(object sender, EventArgs e)
+        {
+            IFormatter formatter = new BinaryFormatter();
+            Stream stream = new FileStream("map.bin", FileMode.Create, FileAccess.Write, FileShare.None);
+            formatter.Serialize(stream, map);
+            stream.Close();
         }
     }
 }

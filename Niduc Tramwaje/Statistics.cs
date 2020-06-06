@@ -7,6 +7,7 @@ using System.Windows.Forms;
 
 namespace Niduc_Tramwaje
 {
+    [Serializable]
     static class Statistics
     {
         public static List<int> numberOfPeopleOnStop(String tramName, double timeInterval, double endOfStatisticPeriod)

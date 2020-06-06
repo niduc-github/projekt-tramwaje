@@ -10,6 +10,7 @@ using System.Diagnostics;
 
 namespace Niduc_Tramwaje
 {
+    [Serializable]
     static class SimulationControl
     {
         static Map map = new Map();

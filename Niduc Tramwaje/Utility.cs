@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Niduc_Tramwaje
 {
+    [Serializable]
     static class Utility
     {
         public static float Clamp01(float value) {

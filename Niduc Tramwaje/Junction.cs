@@ -7,24 +7,31 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Niduc_Tramwaje {
-    class Junction : TrackPoint{
+namespace Niduc_Tramwaje
+{
+    [Serializable]
+    class Junction : TrackPoint
+    {
         List<TrackPoint> connections;
 
-        public Junction(Vector2 position) {
+        public Junction(Vector2 position)
+        {
             connections = new List<TrackPoint>();
             this.position = position;
         }
 
-        protected override void AddConnection(TrackPoint trackPoint) {
+        protected override void AddConnection(TrackPoint trackPoint)
+        {
             connections.Add(trackPoint);
         }
 
-        protected override bool HasFreeConnection() {
+        protected override bool HasFreeConnection()
+        {
             return true;
         }
 
-        protected override bool HasConnection(TrackPoint trackPoint) {
+        protected override bool HasConnection(TrackPoint trackPoint)
+        {
             return connections.Contains(trackPoint);
         }
     }
