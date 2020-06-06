@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Edytor_mapy.Properties;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,11 @@ namespace Edytor_mapy
         public Form1()
         {
             InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            picMap.Image = Resources.Wrocław;
         }
     }
 }
