@@ -48,6 +48,10 @@
             this.picMap.Size = new System.Drawing.Size(640, 480);
             this.picMap.TabIndex = 1;
             this.picMap.TabStop = false;
+            this.picMap.Click += new System.EventHandler(this.picMap_Click);
+            this.picMap.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picMap_MouseClick);
+            this.picMap.MouseHover += new System.EventHandler(this.picMap_MouseHover);
+            this.picMap.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picMap_MouseMove);
             // 
             // label1
             // 
