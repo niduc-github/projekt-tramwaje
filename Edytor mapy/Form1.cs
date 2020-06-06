@@ -149,7 +149,21 @@ namespace Edytor_mapy
             }
             else if (usuwanie_przystanku)
             {
-
+                foreach (TramStopSerializable ts in przystanki)
+                {
+                    if ((abs(ts.X - e.X) < 10 && abs(ts.Y - e.Y) < 10))
+                    {
+                        wybrany_przystanek = ts;
+                        przystanki.Remove(wybrany_przystanek);
+                        foreach (TrackSerializable ln in linie)
+                        {
+                            ln.przystanki.Remove(wybrany_przystanek);
+                        }
+                        picMap.Image = RysujMapę();
+                        break;
+                    }
+                }
+         
                 usuwanie_przystanku = false;
             }
             else if (dodawanie_przystanku_do_linii)
