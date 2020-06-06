@@ -87,5 +87,10 @@ namespace Edytor_mapy
 
 
         }
+
+        private void btnEdytujPrzystanek_Click(object sender, EventArgs e)
+        {
+            
+        }
     }
 }
