@@ -23,13 +23,18 @@ namespace Niduc_Tramwaje
         List<Passenger> passengers;
         private float timer = 0f;
         List<Tuple<Tram, float>> incomingTramsTimes;
+        private static List<TramStop> allTramStops = new List<TramStop>();
 
         private static float maxGenerationSpeed = 400f;
         private static float generationSlider = 0.5f;
         public static float GenerationSpeedSlider
         {
             get => generationSlider;
-            set => generationSlider = Utility.Clamp01(value);
+            set {
+                generationSlider = Utility.Clamp01(value);
+                foreach (TramStop stop in allTramStops)
+                    stop.timer = 0f;
+            }
         }
 
         public TrackPoint Connection1 => connection1;
@@ -51,6 +56,11 @@ namespace Niduc_Tramwaje
             connection2 = null;
             slots12 = new Queue<Tram>();
             slots21 = new Queue<Tram>();
+            allTramStops.Add(this);
+        }
+
+        ~TramStop() {
+            allTramStops.Remove(this);
         }
 
         public TramStop(String name, Vector2 position) : this(name, position, (float)r.NextDouble()) { }
