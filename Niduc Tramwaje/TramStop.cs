@@ -25,7 +25,7 @@ namespace Niduc_Tramwaje
         List<Tuple<Tram, float>> incomingTramsTimes;
         private static List<TramStop> allTramStops = new List<TramStop>();
 
-        private static float maxGenerationSpeed = 400f;
+        private static float maxGenerationSpeed = 1000f;
         private static float generationSlider = 0.5f;
         public static float GenerationSpeedSlider
         {
@@ -133,10 +133,9 @@ namespace Niduc_Tramwaje
             timer += time;
             if (popularity <= 0.01f || GenerationSpeed <= 0.01f)
                 return;
-            float timePerPassenger = 
-                (float)SimulationControl.HoursToSeconds(
-                    (1f / (popularity * GenerationSpeed * PopularityMultiplier(SimulationControl.TotalTime)))
-                    );
+            float product = (float)(popularity * GenerationSpeed * PopularityMultiplier(SimulationControl.TotalTime));
+            float timePerPassenger = (float)
+                SimulationControl.HoursToSeconds(1f / product);
             while (timer >= timePerPassenger) {
                 timer -= timePerPassenger;
                 passengers.Add(new Passenger(accessibleStops));
@@ -145,6 +144,8 @@ namespace Niduc_Tramwaje
 
         public double PopularityMultiplier(double time)
         {
+            if (time >= 86399)
+                time -= 86399;
             double currentPopularity = 0;
             if (time <= 14400 || time >= 86400)
                 currentPopularity = 0;

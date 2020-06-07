@@ -51,9 +51,16 @@ namespace Niduc_Tramwaje
             map.Traffic[Tuple.Create(currentTrackPoint, nextTrackPoint)].Enqueue(this);       
         }
 
-        public void UpdateArrivalTimes() {
-            foreach(TramStop tramStop in track.Stops) {
-                tramStop.UpdateArrivalTime(this);
+        float arrivalTimer = 0f;
+        float arrivalUpdateInterval = 10f;
+
+        public void UpdateArrivalTimes(float timeStep) {
+            arrivalTimer += timeStep;
+            if(arrivalTimer > arrivalUpdateInterval) {
+                arrivalTimer -= arrivalUpdateInterval;
+                foreach (TramStop tramStop in track.Stops) {
+                    tramStop.UpdateArrivalTime(this);
+                }
             }
         }
 
@@ -76,7 +83,10 @@ namespace Niduc_Tramwaje
         private bool BestChoice(Passenger passenger, TramStop targetTramStop) {
             List<Tuple<Tram, float>> suitingTrams = targetTramStop.IncomingTramsTimes.Where(x => x.Item1.getTrack().Stops.Contains(CurrentTramStop)).ToList();
             suitingTrams.Sort(Comparer<Tuple<Tram, float>>.Create((x, y) => (x.Item2 + x.Item1.GetTimeToStop(CurrentTramStop)).CompareTo(y.Item2 + y.Item1.GetTimeToStop(CurrentTramStop))));
-            return suitingTrams.First().Item1 == this;
+            if (suitingTrams.Count > 0)
+                return suitingTrams.First().Item1 == this;
+            else
+                return true;
         }
 
         public void ExchangePassangers(float time) {

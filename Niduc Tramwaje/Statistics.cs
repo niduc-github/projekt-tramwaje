@@ -15,14 +15,16 @@ namespace Niduc_Tramwaje
     {
         Graphics g;
 
-        double intervalHours = 1f;
+        double intervalHours = 0.33f;
         static int id = 1;
 
         Color lowTrafficColor = Color.LightGreen;
         Color highTrafficColor = Color.Red;
 
-        double timeSeconds = 0;
+        int upperTramStopLimit = 25;
+        int tramPerSegmentLimit = 4;
 
+        double timeSeconds = 0;
 
         public void Update(float time, Map map) {
             timeSeconds += time;
@@ -37,7 +39,7 @@ namespace Niduc_Tramwaje
             g = Graphics.FromImage(bitmap);
  
             foreach (var segmentTraffic in map.Traffic) {
-                Color blend = Utility.Blend(lowTrafficColor, highTrafficColor, segmentTraffic.Value.Count / 5f);
+                Color blend = Utility.Blend(lowTrafficColor, highTrafficColor, segmentTraffic.Value.Count / (float)tramPerSegmentLimit);
                 Vector2 pos1 = segmentTraffic.Key.Item1.getPosition(), pos2 = segmentTraffic.Key.Item2.getPosition();
                 int width = 5;
                 g.DrawLine(new Pen(blend, width), pos1.X, pos1.Y, pos2.X, pos2.Y);
@@ -45,7 +47,7 @@ namespace Niduc_Tramwaje
 
             foreach (TramStop stop in map.TramStops) {
                 int radius = 16;
-                Color blend = Utility.Blend(lowTrafficColor, highTrafficColor, stop.getPassangerList().Count / 40f);
+                Color blend = Utility.Blend(lowTrafficColor, highTrafficColor, stop.getPassangerList().Count / (float)upperTramStopLimit);
                 g.DrawEllipse(new Pen(Color.Black), stop.getPosition().X - radius / 2, stop.getPosition().Y - radius / 2, radius, radius);
                 g.FillEllipse(new SolidBrush(blend), stop.getPosition().X - radius / 2, stop.getPosition().Y - radius / 2, radius, radius);
             }

@@ -20,10 +20,10 @@ namespace Niduc_Tramwaje
         static Map map = new Map();
         static float timeStep = 1f;
         static float minTimeScale = 0f;
-        static float maxTimeScale = 10000f;
+        static float maxTimeScale = 30000f;
         static float timeScaleSlider = 1.01f/maxTimeScale;
 
-        static float TimeScale => minTimeScale + (maxTimeScale - minTimeScale) * timeScaleSlider;
+        static float TimeScale => minTimeScale + (maxTimeScale - minTimeScale) * timeScaleSlider * timeScaleSlider;
         public static float TimeScaleSlider {
             set => timeScaleSlider = Utility.Clamp01(value);
             get => timeScaleSlider;
@@ -62,18 +62,18 @@ namespace Niduc_Tramwaje
         }
 
         public static float BitmapUnitsToKm(float value) {
-            return value / 40f;
+            return value / 130f;
         }
 
         public static void Simulation()
         {
             stopwatch.Stop();
             time += stopwatch.Elapsed.TotalSeconds * TimeScale;
-            totalTime += stopwatch.Elapsed.TotalSeconds * TimeScale;
             stopwatch.Restart();
 
             while(time >= timeStep) 
             {
+                totalTime += timeStep;
                 time -= timeStep;
                 UpdateTrams();
                 UpdateTramStops();
@@ -87,7 +87,7 @@ namespace Niduc_Tramwaje
             foreach (Tram t in map.Trams) 
             {
                 t.Update(timeStep);
-                t.UpdateArrivalTimes();
+                //t.UpdateArrivalTimes(timeStep);
             }
         }
 
