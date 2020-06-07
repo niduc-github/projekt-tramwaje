@@ -29,7 +29,7 @@ namespace Niduc_Tramwaje
                 this.AddConnection(trackPoint);
                 trackPoint.AddConnection(this);
             } else
-                throw new Exception("Jeden z elementów nie ma wolnych połączeń!");
+                throw new Exception("Jeden z elementów nie ma wolnych połączeń! " + ((this is TramStop) ? (this as TramStop).getTramStopName() : ""));
         }
 
         public bool IsConnectedWith(TrackPoint trackPoint) {

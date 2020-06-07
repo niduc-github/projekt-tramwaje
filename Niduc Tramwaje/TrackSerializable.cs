@@ -9,7 +9,7 @@ namespace Niduc_Tramwaje
     [Serializable]
     public class TrackSerializable
     {
-        public List<TramStopSerializable> przystanki;
+        public List<TrackPointSerializable> przystanki;
         public int numer;
     }
 }

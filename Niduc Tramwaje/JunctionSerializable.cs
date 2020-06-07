@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Niduc_Tramwaje
 {
+    [Serializable]
     public class JunctionSerializable : TrackPointSerializable
     {
     }

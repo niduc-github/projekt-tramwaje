@@ -106,7 +106,7 @@ namespace Niduc_Tramwaje
 
             IFormatter formatter = new BinaryFormatter();
             Stream stream = new FileStream("przystanki.bin", FileMode.Open, FileAccess.Read, FileShare.Read);
-            List<TramStopSerializable> przystanki = (List<TramStopSerializable>)formatter.Deserialize(stream);
+            List<TrackPointSerializable> przystanki = (List<TrackPointSerializable>)formatter.Deserialize(stream);
             stream.Close();
 
             Stream stream2 = new FileStream("linie.bin", FileMode.Open, FileAccess.Read, FileShare.Read);
@@ -114,19 +114,27 @@ namespace Niduc_Tramwaje
             stream2.Close();
 
 
-            foreach (TramStopSerializable tss in przystanki)
-            {
-                map.AddTrackPoint(new TramStop(tss.Name, new Vector2(tss.X, tss.Y)));
-            }
+            foreach (TrackPointSerializable tss in przystanki) {
 
+                if (tss is TramStopSerializable) {
+                    TramStopSerializable ts = tss as TramStopSerializable;
+                    map.AddTrackPoint(new TramStop(ts.Name, new Vector2(ts.X, ts.Y), ts.popularity));
+                } else if (tss is JunctionSerializable) {
+                    JunctionSerializable js = tss as JunctionSerializable;
+                    map.AddTrackPoint(new Junction(new Vector2(tss.X, tss.Y)));
+                }
+                
+            }
+            
             foreach (TrackSerializable ts in linie)
             {
+
                 Track t = new Track(ts.numer);
                 //foreach (TramStopSerializable tss in przystanki)
                 {
-                    foreach (TramStop trst in map.TramStops)
+                    foreach (TrackPoint trst in map.TrackPoints)
                     {
-                        if (/*trst.getPosition().X == tss.X && trst.getPosition().Y == tss.Y && */
+                        if (//trst.getPosition().X == tss.X && trst.getPosition().Y == tss.Y &&
                             linie.Where(x => x.numer == ts.numer).ToList()[0].przystanki.Where(x => x.X == trst.getPosition().X).ToList().Count > 0
                             && linie.Where(x => x.numer == ts.numer).ToList()[0].przystanki.Where(x => x.Y == trst.getPosition().Y).ToList().Count > 0)
                         {
@@ -135,6 +143,7 @@ namespace Niduc_Tramwaje
                         }
                     }
                 }
+
                 map.AddTrack(t);
                 map.Trams.Add(new Tram(map, 30, t, t.Stops.ElementAt(0), 0));
                 map.Trams.Add(new Tram(map, 30, t, t.Stops.Last(), 0));

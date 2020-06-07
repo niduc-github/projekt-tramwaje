@@ -27,6 +27,7 @@ namespace Edytor_mapy
         }
 
         #region Globalne_flagi
+        bool dodawanie_skrzyzowania = false;
         bool dodawanie_przystanku = false;
         bool edytowanie_przystanku = false;
         bool edytowanie_przystanku_2 = false;
@@ -47,7 +48,7 @@ namespace Edytor_mapy
         #region Zmienne_do_tworzenia_mapy
         //Map map = new Map();
         //TramStop wybrany_przystanek;
-        List<TramStopSerializable> przystanki = new List<TramStopSerializable>();
+        List<TrackPointSerializable> przystanki = new List<TrackPointSerializable>();
         List<TrackSerializable> linie = new List<TrackSerializable>();
         TramStopSerializable wybrany_przystanek;
         #endregion
@@ -55,11 +56,14 @@ namespace Edytor_mapy
         Bitmap RysujMapę()
         {
             Bitmap b = new Bitmap(Resources.Wrocław);
-            foreach(TramStopSerializable ts in przystanki)
+            foreach(TramStopSerializable ts in przystanki.OfType<TramStopSerializable>())
             {
                 Graphics.FromImage(b).DrawRectangle(new Pen(Color.Black), ts.X - 5, ts.Y - 5, 11, 11);
             }
-            foreach(TrackSerializable tr in linie)
+            foreach (JunctionSerializable ts in przystanki.OfType<JunctionSerializable>()) {
+                Graphics.FromImage(b).DrawRectangle(new Pen(Color.Black), ts.X - 2, ts.Y - 2, 5, 5);
+            }
+            foreach (TrackSerializable tr in linie)
             {
                 for (int i = 0; i < tr.przystanki.Count - 1; i++)
                 {
@@ -82,6 +86,7 @@ namespace Edytor_mapy
 
         private void btnDodajPrzystanek_Click(object sender, EventArgs e)
         {
+            dodawanie_skrzyzowania = false;
             dodawanie_przystanku = true;
             edytowanie_przystanku = false;
             edytowanie_przystanku_2 = false;
@@ -89,7 +94,19 @@ namespace Edytor_mapy
             dodawanie_przystanku_do_linii = false;
             usuwanie_przystanku_z_linii = false;
             usuwanie_linii = false;
+        }
 
+
+        //dodaj skrzyzowanie
+        private void button1_Click(object sender, EventArgs e) {
+            dodawanie_skrzyzowania = true;
+            dodawanie_przystanku = false;
+            edytowanie_przystanku = false;
+            edytowanie_przystanku_2 = false;
+            usuwanie_przystanku = false;
+            dodawanie_przystanku_do_linii = false;
+            usuwanie_przystanku_z_linii = false;
+            usuwanie_linii = false;
         }
 
         private void picMap_MouseHover(object sender, EventArgs e)
@@ -121,7 +138,7 @@ namespace Edytor_mapy
 
             if (dodawanie_przystanku)
             {
-                przystanki.Add(new TramStopSerializable() { Name = Interaction.InputBox("Nazwa przystanku"), X = e.X, Y = e.Y });
+                przystanki.Add(new TramStopSerializable() { Name = Interaction.InputBox("Nazwa przystanku"), X = e.X, Y = e.Y, popularity = trackBar1.Value / 100f });
                 Graphics.FromImage(img).DrawRectangle(new Pen(Color.Black), e.X - 5, e.Y - 5, 11, 11);
                 picMap.Image = img;
 
@@ -129,7 +146,7 @@ namespace Edytor_mapy
             }
             else if (edytowanie_przystanku)
             {
-                foreach (TramStopSerializable ts in przystanki)
+                foreach (TramStopSerializable ts in przystanki.OfType<TramStopSerializable>())
                 {
                     if ((abs(ts.X - e.X) < 10 && abs(ts.Y - e.Y) < 10))
                     {
@@ -149,7 +166,7 @@ namespace Edytor_mapy
             }
             else if (usuwanie_przystanku)
             {
-                foreach (TramStopSerializable ts in przystanki)
+                foreach (TramStopSerializable ts in przystanki.OfType<TramStopSerializable>())
                 {
                     if ((abs(ts.X - e.X) < 10 && abs(ts.Y - e.Y) < 10))
                     {
@@ -168,7 +185,7 @@ namespace Edytor_mapy
             }
             else if (dodawanie_przystanku_do_linii)
             {
-                foreach (TramStopSerializable ts in przystanki)
+                foreach (TrackPointSerializable ts in przystanki)
                 {
                     if ((abs(ts.X - e.X) < 10 && abs(ts.Y - e.Y) < 10))
                     {
@@ -186,7 +203,7 @@ namespace Edytor_mapy
                         {
                             TrackSerializable tr = new TrackSerializable();
                             tr.numer = numer;
-                            tr.przystanki = new List<TramStopSerializable>();
+                            tr.przystanki = new List<TrackPointSerializable>();
                             tr.przystanki.Add(ts);
                             linie.Add(tr);
                         }
@@ -198,7 +215,7 @@ namespace Edytor_mapy
             }
             else if (usuwanie_przystanku_z_linii)
             {
-                foreach (TramStopSerializable ts in przystanki)
+                foreach (TramStopSerializable ts in przystanki.OfType<TramStopSerializable>())
                 {
                     if ((abs(ts.X - e.X) < 10 && abs(ts.Y - e.Y) < 10))
                     {
@@ -212,6 +229,13 @@ namespace Edytor_mapy
                     }
                 }
                 usuwanie_przystanku_z_linii = false;
+            }
+            else if (dodawanie_skrzyzowania) {
+                przystanki.Add(new JunctionSerializable() { X = e.X, Y = e.Y });
+                Graphics.FromImage(img).DrawRectangle(new Pen(Color.Black), e.X - 5, e.Y - 5, 11, 11);
+                picMap.Image = img;
+
+                dodawanie_skrzyzowania = false;
             }
             picMap.Image = RysujMapę();
 
@@ -297,11 +321,13 @@ namespace Edytor_mapy
         {
             IFormatter formatter = new BinaryFormatter();
             Stream stream = new FileStream("przystanki.bin", FileMode.Open, FileAccess.Read, FileShare.Read);
-            przystanki = (List<TramStopSerializable>)formatter.Deserialize(stream);
+            przystanki = (List<TrackPointSerializable>)formatter.Deserialize(stream);
             stream.Close();
             picMap.Image = RysujMapę();
         }
 
-        
+        private void trackBar1_Scroll(object sender, EventArgs e) {
+
+        }
     }
 }

@@ -38,7 +38,10 @@
             this.btnUsuńPrzystanekZLinii = new System.Windows.Forms.Button();
             this.btnZapiszDoPliku = new System.Windows.Forms.Button();
             this.btnWczytajZPliku = new System.Windows.Forms.Button();
+            this.dodajSkrzyzowanie = new System.Windows.Forms.Button();
+            this.trackBar1 = new System.Windows.Forms.TrackBar();
             ((System.ComponentModel.ISupportInitialize)(this.picMap)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
             // picMap
@@ -95,7 +98,7 @@
             // btnDodajPrzystanekDoLinii
             // 
             this.btnDodajPrzystanekDoLinii.Location = new System.Drawing.Point(712, 154);
-            this.btnDodajPrzystanekDoLinii.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnDodajPrzystanekDoLinii.Margin = new System.Windows.Forms.Padding(2);
             this.btnDodajPrzystanekDoLinii.Name = "btnDodajPrzystanekDoLinii";
             this.btnDodajPrzystanekDoLinii.Size = new System.Drawing.Size(158, 23);
             this.btnDodajPrzystanekDoLinii.TabIndex = 5;
@@ -106,7 +109,7 @@
             // btnUsuńLinię
             // 
             this.btnUsuńLinię.Location = new System.Drawing.Point(712, 208);
-            this.btnUsuńLinię.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnUsuńLinię.Margin = new System.Windows.Forms.Padding(2);
             this.btnUsuńLinię.Name = "btnUsuńLinię";
             this.btnUsuńLinię.Size = new System.Drawing.Size(158, 23);
             this.btnUsuńLinię.TabIndex = 6;
@@ -117,7 +120,7 @@
             // btnUsuńPrzystanekZLinii
             // 
             this.btnUsuńPrzystanekZLinii.Location = new System.Drawing.Point(712, 181);
-            this.btnUsuńPrzystanekZLinii.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnUsuńPrzystanekZLinii.Margin = new System.Windows.Forms.Padding(2);
             this.btnUsuńPrzystanekZLinii.Name = "btnUsuńPrzystanekZLinii";
             this.btnUsuńPrzystanekZLinii.Size = new System.Drawing.Size(158, 23);
             this.btnUsuńPrzystanekZLinii.TabIndex = 7;
@@ -128,7 +131,7 @@
             // btnZapiszDoPliku
             // 
             this.btnZapiszDoPliku.Location = new System.Drawing.Point(712, 235);
-            this.btnZapiszDoPliku.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnZapiszDoPliku.Margin = new System.Windows.Forms.Padding(2);
             this.btnZapiszDoPliku.Name = "btnZapiszDoPliku";
             this.btnZapiszDoPliku.Size = new System.Drawing.Size(158, 23);
             this.btnZapiszDoPliku.TabIndex = 8;
@@ -140,7 +143,7 @@
             // 
             this.btnWczytajZPliku.Enabled = false;
             this.btnWczytajZPliku.Location = new System.Drawing.Point(712, 262);
-            this.btnWczytajZPliku.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnWczytajZPliku.Margin = new System.Windows.Forms.Padding(2);
             this.btnWczytajZPliku.Name = "btnWczytajZPliku";
             this.btnWczytajZPliku.Size = new System.Drawing.Size(158, 23);
             this.btnWczytajZPliku.TabIndex = 9;
@@ -148,11 +151,33 @@
             this.btnWczytajZPliku.UseVisualStyleBackColor = true;
             this.btnWczytajZPliku.Click += new System.EventHandler(this.btnWczytajZPliku_Click);
             // 
+            // dodajSkrzyzowanie
+            // 
+            this.dodajSkrzyzowanie.Location = new System.Drawing.Point(712, 39);
+            this.dodajSkrzyzowanie.Name = "dodajSkrzyzowanie";
+            this.dodajSkrzyzowanie.Size = new System.Drawing.Size(158, 23);
+            this.dodajSkrzyzowanie.TabIndex = 10;
+            this.dodajSkrzyzowanie.Text = "Dodaj skrzyzowanie";
+            this.dodajSkrzyzowanie.UseVisualStyleBackColor = true;
+            this.dodajSkrzyzowanie.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // trackBar1
+            // 
+            this.trackBar1.Location = new System.Drawing.Point(732, 323);
+            this.trackBar1.Maximum = 100;
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.Size = new System.Drawing.Size(104, 45);
+            this.trackBar1.TabIndex = 11;
+            this.trackBar1.Value = 30;
+            this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(902, 572);
+            this.Controls.Add(this.trackBar1);
+            this.Controls.Add(this.dodajSkrzyzowanie);
             this.Controls.Add(this.btnWczytajZPliku);
             this.Controls.Add(this.btnZapiszDoPliku);
             this.Controls.Add(this.btnUsuńPrzystanekZLinii);
@@ -167,6 +192,7 @@
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picMap)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -184,6 +210,8 @@
         private System.Windows.Forms.Button btnUsuńPrzystanekZLinii;
         private System.Windows.Forms.Button btnZapiszDoPliku;
         private System.Windows.Forms.Button btnWczytajZPliku;
+        private System.Windows.Forms.Button dodajSkrzyzowanie;
+        private System.Windows.Forms.TrackBar trackBar1;
     }
 }
 

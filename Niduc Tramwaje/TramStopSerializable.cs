@@ -10,5 +10,6 @@ namespace Niduc_Tramwaje
     public class TramStopSerializable : TrackPointSerializable
     {
         public string Name;
+        public float popularity;
     }
 }
