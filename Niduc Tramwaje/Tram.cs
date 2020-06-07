@@ -113,7 +113,9 @@ namespace Niduc_Tramwaje
                         break;
                     }
                     if (track.Stops.Contains(passList[i].GetTargetStop())) {
-                        if(BestChoice(passList[i], passList[i].GetTargetStop())) {
+                        //if (SimulationControl.TimeScaleSlider < 0.05f) Form1.WriteToConsole("contains");
+                        if (BestChoice(passList[i], passList[i].GetTargetStop())) {
+                            //if (SimulationControl.TimeScaleSlider < 0.05f) Form1.WriteToConsole("best");
                             passengers.Add(passList[i]);
                             passList.RemoveAt(i);
                             loadTimer -= 1 / loadSpeed;

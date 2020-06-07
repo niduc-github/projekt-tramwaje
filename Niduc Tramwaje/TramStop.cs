@@ -108,6 +108,7 @@ namespace Niduc_Tramwaje
         public void ExpandAccessibleStops(Track track) 
         {
             accessibleStops.UnionWith(track.Stops);
+            accessibleStops.Remove(this);
         }
 
         public void AddPassengers(IReadOnlyCollection<TramStop> accessibleStops, int amount) {
