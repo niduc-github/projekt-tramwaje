@@ -135,7 +135,7 @@ namespace Niduc_Tramwaje
                 return;
             float timePerPassenger = 
                 (float)SimulationControl.HoursToSeconds(
-                    (1f / (popularity * GenerationSpeed /** PopularityMultiplier(SimulationControl.TotalTime)*/))
+                    (1f / (popularity * GenerationSpeed * PopularityMultiplier(SimulationControl.TotalTime)))
                     );
             while (timer >= timePerPassenger) {
                 timer -= timePerPassenger;

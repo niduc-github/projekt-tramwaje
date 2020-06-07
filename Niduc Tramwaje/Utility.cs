@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace Niduc_Tramwaje
 {
@@ -28,6 +29,15 @@ namespace Niduc_Tramwaje
                     value = 2 * min - value;
             }
             return value;
+        }
+
+        public static Color Blend(Color color1, Color color2, float amount) {
+            amount = Clamp01(amount);
+            byte A = (byte)(color1.A * (1 - amount) + color2.A * amount);
+            byte G = (byte)(color1.G * (1 - amount) + color2.G * amount);
+            byte R = (byte)(color1.R * (1 - amount) + color2.R * amount);
+            byte B = (byte)(color1.B * (1 - amount) + color2.B * amount);
+            return Color.FromArgb(A, R, G, B);
         }
     }
 }

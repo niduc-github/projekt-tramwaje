@@ -49,7 +49,7 @@ namespace Niduc_Tramwaje
             // 
             // tmrGraphics
             // 
-            this.tmrGraphics.Interval = 30;
+            this.tmrGraphics.Interval = 60;
             this.tmrGraphics.Tick += new System.EventHandler(this.tmrGraphics_Tick);
             // 
             // textBox1

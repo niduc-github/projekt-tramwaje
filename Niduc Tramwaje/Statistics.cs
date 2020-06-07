@@ -4,34 +4,58 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing;
+using System.Numerics;
+using Niduc_Tramwaje.Properties;
 
 namespace Niduc_Tramwaje
 {
     [Serializable]
-    static class Statistics
+    class Statistics
     {
-        public static List<int> numberOfPeopleOnStop(String tramName, double timeInterval, double endOfStatisticPeriod)
-        {
-            TramStop currentStop = null;
-            List<int> statisticOfPeopleOnStop = new List<int>();
-            for(int i=0; i<= SimulationControl.getMap().TramStops.Count();i++)
-            {
-                if(SimulationControl.getMap().TramStops.ElementAt(i).getTramStopName() == tramName)
-                {
-                    currentStop = SimulationControl.getMap().TramStops.ElementAt(i);
-                    break;
-                }
+        Graphics g;
+
+        double intervalHours = 1f;
+        static int id = 1;
+
+        Color lowTrafficColor = Color.LightGreen;
+        Color highTrafficColor = Color.Red;
+
+        double timeSeconds = 0;
+
+
+        public void Update(float time, Map map) {
+            timeSeconds += time;
+            if(timeSeconds > SimulationControl.HoursToSeconds(intervalHours)) {
+                timeSeconds -= SimulationControl.HoursToSeconds(intervalHours);
+                ProbeTraffic(map);
             }
-            double currentTime = timeInterval;
-            while(currentTime <= endOfStatisticPeriod)
-            {
-                if(SimulationControl.getTime() == currentTime)
-                {
-                    statisticOfPeopleOnStop.Add(currentStop.getPassangerList().Count());
-                }
-                currentTime += timeInterval;
+        }
+
+        public void ProbeTraffic(Map map) {
+            Bitmap bitmap = Resources.Wrocław;
+            g = Graphics.FromImage(bitmap);
+ 
+            foreach (var segmentTraffic in map.Traffic) {
+                Color blend = Utility.Blend(lowTrafficColor, highTrafficColor, segmentTraffic.Value.Count / 5f);
+                Vector2 pos1 = segmentTraffic.Key.Item1.getPosition(), pos2 = segmentTraffic.Key.Item2.getPosition();
+                int width = 5;
+                g.DrawLine(new Pen(blend, width), pos1.X, pos1.Y, pos2.X, pos2.Y);
             }
-            return statisticOfPeopleOnStop;
+
+            foreach (TramStop stop in map.TramStops) {
+                int radius = 16;
+                Color blend = Utility.Blend(lowTrafficColor, highTrafficColor, stop.getPassangerList().Count / 40f);
+                g.DrawEllipse(new Pen(Color.Black), stop.getPosition().X - radius / 2, stop.getPosition().Y - radius / 2, radius, radius);
+                g.FillEllipse(new SolidBrush(blend), stop.getPosition().X - radius / 2, stop.getPosition().Y - radius / 2, radius, radius);
+            }
+
+            TimeSpan timeSpan = TimeSpan.FromSeconds(SimulationControl.TotalTime);
+            string timeString = timeSpan.ToString(@"hh\:mm\:ss");
+            g.DrawString(timeString, new Font("Arial", 16), new SolidBrush(Color.Black), bitmap.Width - 110f, 20f);
+
+            bitmap.Save("Stats" + id.ToString() + ".bmp");
+            id++;
         }
     }
 }

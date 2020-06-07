@@ -44,8 +44,11 @@ namespace Niduc_Tramwaje
 
         public static double TotalTime => totalTime;
 
+        static Statistics stats;
+
         static SimulationControl() 
         {
+            stats = new Statistics();
             stopwatch.Start();
             totalTime = 14000;
         }
@@ -59,7 +62,7 @@ namespace Niduc_Tramwaje
         }
 
         public static float BitmapUnitsToKm(float value) {
-            return value / 250f;
+            return value / 40f;
         }
 
         public static void Simulation()
@@ -74,8 +77,10 @@ namespace Niduc_Tramwaje
                 time -= timeStep;
                 UpdateTrams();
                 UpdateTramStops();
+                stats.Update(timeStep, map);
             }
         }
+
 
         private static void UpdateTrams() 
         {
