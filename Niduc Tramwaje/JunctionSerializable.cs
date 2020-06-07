@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace Niduc_Tramwaje
 {
-    [Serializable]
-    public class TramStopSerializable : TrackPointSerializable
+    public class JunctionSerializable : TrackPointSerializable
     {
-        public string Name;
     }
 }
