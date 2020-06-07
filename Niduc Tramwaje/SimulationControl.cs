@@ -132,15 +132,8 @@ namespace Niduc_Tramwaje
                 Track t = new Track(ts.numer);
                 //foreach (TramStopSerializable tss in przystanki)
                 {
-                    foreach (TrackPoint trst in map.TrackPoints)
-                    {
-                        if (//trst.getPosition().X == tss.X && trst.getPosition().Y == tss.Y &&
-                            linie.Where(x => x.numer == ts.numer).ToList()[0].przystanki.Where(x => x.X == trst.getPosition().X).ToList().Count > 0
-                            && linie.Where(x => x.numer == ts.numer).ToList()[0].przystanki.Where(x => x.Y == trst.getPosition().Y).ToList().Count > 0)
-                        {
-                            //TramStop tr = new TramStop(tss.Name, new Vector2(tss.X, tss.Y));
-                            t.AddTrackPoint(trst);
-                        }
+                    foreach(TrackPointSerializable trst in ts.przystanki) {
+                        t.AddTrackPoint(map.TrackPoints.ToList().Find(point => point.getPosition().X == trst.X && point.getPosition().Y == trst.Y));
                     }
                 }
 
