@@ -17,7 +17,7 @@ using System.IO;
 
 namespace Edytor_mapy
 {
-    
+
 
     public partial class Form1 : Form
     {
@@ -56,11 +56,12 @@ namespace Edytor_mapy
         Bitmap RysujMapę()
         {
             Bitmap b = new Bitmap(Resources.Wrocław);
-            foreach(TramStopSerializable ts in przystanki.OfType<TramStopSerializable>())
+            foreach (TramStopSerializable ts in przystanki.OfType<TramStopSerializable>())
             {
                 Graphics.FromImage(b).DrawRectangle(new Pen(Color.Black), ts.X - 5, ts.Y - 5, 11, 11);
             }
-            foreach (JunctionSerializable ts in przystanki.OfType<JunctionSerializable>()) {
+            foreach (JunctionSerializable ts in przystanki.OfType<JunctionSerializable>())
+            {
                 Graphics.FromImage(b).DrawRectangle(new Pen(Color.Black), ts.X - 2, ts.Y - 2, 5, 5);
             }
             foreach (TrackSerializable tr in linie)
@@ -98,7 +99,8 @@ namespace Edytor_mapy
 
 
         //dodaj skrzyzowanie
-        private void button1_Click(object sender, EventArgs e) {
+        private void button1_Click(object sender, EventArgs e)
+        {
             dodawanie_skrzyzowania = true;
             dodawanie_przystanku = false;
             edytowanie_przystanku = false;
@@ -111,7 +113,7 @@ namespace Edytor_mapy
 
         private void picMap_MouseHover(object sender, EventArgs e)
         {
-            
+
         }
 
         private void picMap_MouseMove(object sender, MouseEventArgs e)
@@ -128,7 +130,7 @@ namespace Edytor_mapy
 
         private void picMap_Click(object sender, EventArgs e)
         {
-            
+
         }
 
         private void picMap_MouseClick(object sender, MouseEventArgs e)
@@ -180,7 +182,7 @@ namespace Edytor_mapy
                         break;
                     }
                 }
-         
+
                 usuwanie_przystanku = false;
             }
             else if (dodawanie_przystanku_do_linii)
@@ -230,7 +232,8 @@ namespace Edytor_mapy
                 }
                 usuwanie_przystanku_z_linii = false;
             }
-            else if (dodawanie_skrzyzowania) {
+            else if (dodawanie_skrzyzowania)
+            {
                 przystanki.Add(new JunctionSerializable() { X = e.X, Y = e.Y });
                 Graphics.FromImage(img).DrawRectangle(new Pen(Color.Black), e.X - 5, e.Y - 5, 11, 11);
                 picMap.Image = img;
@@ -319,14 +322,43 @@ namespace Edytor_mapy
 
         private void btnWczytajZPliku_Click(object sender, EventArgs e)
         {
+            przystanki = new List<TrackPointSerializable>();
+            linie = new List<TrackSerializable>();
+
             IFormatter formatter = new BinaryFormatter();
             Stream stream = new FileStream("przystanki.bin", FileMode.Open, FileAccess.Read, FileShare.Read);
             przystanki = (List<TrackPointSerializable>)formatter.Deserialize(stream);
             stream.Close();
+
+            List<TrackSerializable> temp;
+
+            Stream stream2 = new FileStream("linie.bin", FileMode.Open, FileAccess.Read, FileShare.Read);
+            temp = (List<TrackSerializable>)formatter.Deserialize(stream2);
+            stream2.Close();
+
+            foreach (TrackSerializable ts in temp)
+            {
+                TrackSerializable ts1 = new TrackSerializable();
+                ts1.przystanki = new List<TrackPointSerializable>();
+                ts1.numer = ts.numer;
+                foreach (TrackPointSerializable tps in ts.przystanki)
+                {
+                    foreach (TrackPointSerializable tps_real in przystanki)
+                    {
+                        if (tps.X == tps_real.X && tps.Y == tps_real.Y)
+                        {
+                            ts1.przystanki.Add(tps_real);
+                        }
+                    }
+                }
+                linie.Add(ts1);
+            }
+
             picMap.Image = RysujMapę();
         }
 
-        private void trackBar1_Scroll(object sender, EventArgs e) {
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
 
         }
     }

@@ -141,7 +141,6 @@
             // 
             // btnWczytajZPliku
             // 
-            this.btnWczytajZPliku.Enabled = false;
             this.btnWczytajZPliku.Location = new System.Drawing.Point(712, 262);
             this.btnWczytajZPliku.Margin = new System.Windows.Forms.Padding(2);
             this.btnWczytajZPliku.Name = "btnWczytajZPliku";
