@@ -70,11 +70,11 @@ namespace Niduc_Tramwaje
             int i = trackPointIndex;
             bool tempForward = forward;
             float distance = 0;
-            while(track.TrackPoints.ElementAt(Utility.PingPong(i,0,track.TrackPoints.Count-1)) != tramStop) {
+            while(track.TrackPoints.ElementAt(i) != tramStop) {
+                i += (tempForward ? 1 : -1);
+                distance += (track.TrackPoints.ElementAt(i).getPosition() - track.TrackPoints.ElementAt(i - (tempForward ? 1 : -1)).getPosition()).Length();
                 if (i == track.TrackPoints.Count - 1 || i == 0)
-                    tempForward = !tempForward;
-                i++;
-                distance += (track.TrackPoints.ElementAt(Utility.PingPong(i, 0, track.TrackPoints.Count - 1)).getPosition() - track.TrackPoints.ElementAt(Utility.PingPong(i-1, 0, track.TrackPoints.Count - 1)).getPosition()).Length();
+                    tempForward = !tempForward;    
             }
             distance = SimulationControl.BitmapUnitsToKm(distance);
             return (float)SimulationControl.HoursToSeconds(distance / speed);
@@ -83,10 +83,21 @@ namespace Niduc_Tramwaje
         private bool BestChoice(Passenger passenger, TramStop targetTramStop) {
             List<Tuple<Tram, float>> suitingTrams = targetTramStop.IncomingTramsTimes.Where(x => x.Item1.getTrack().Stops.Contains(CurrentTramStop)).ToList();
             suitingTrams.Sort(Comparer<Tuple<Tram, float>>.Create((x, y) => (x.Item2 + x.Item1.GetTimeToStop(CurrentTramStop)).CompareTo(y.Item2 + y.Item1.GetTimeToStop(CurrentTramStop))));
-            if (suitingTrams.Count > 0)
+            /*List<Tuple<Tram, float>> suitingTrams = CurrentTramStop.IncomingTramsTimes.Where(x => x.Item1.getTrack().Stops.Contains(targetTramStop)).ToList();
+            suitingTrams.Sort(Comparer<Tuple<Tram, float>>.Create((x, y) => {
+                if (x.Item2 > x.Item1.GetTimeToStop(targetTramStop))
+                    return -1;
+                else if (y.Item2 > y.Item1.GetTimeToStop(targetTramStop))
+                    return 1;
+                else
+                    return x.Item1.GetTimeToStop(targetTramStop) < y.Item1.GetTimeToStop(targetTramStop) ? 1 : -1;
+            }));*/
+            if (suitingTrams.Count > 0) {
                 return suitingTrams.First().Item1 == this;
-            else
+            } else {
                 return true;
+            }
+               
         }
 
         public void ExchangePassangers(float time) {
@@ -123,13 +134,11 @@ namespace Niduc_Tramwaje
                         break;
                     }
                     if (track.Stops.Contains(passList[i].GetTargetStop())) {
-                        //if (SimulationControl.TimeScaleSlider < 0.05f) Form1.WriteToConsole("contains");
                         if (BestChoice(passList[i], passList[i].GetTargetStop())) {
-                            //if (SimulationControl.TimeScaleSlider < 0.05f) Form1.WriteToConsole("best");
                             passengers.Add(passList[i]);
                             passList.RemoveAt(i);
                             loadTimer -= 1 / loadSpeed;
-                        }        
+                        }
                     }
                 } else {
                     break;
@@ -155,8 +164,9 @@ namespace Niduc_Tramwaje
             if (forward) trackPointIndex++;
             else trackPointIndex--;
 
-            if (currentTrackPoint == track.TrackPoints.Last() || currentTrackPoint == track.TrackPoints.First())
+            if (currentTrackPoint == track.TrackPoints.Last() || currentTrackPoint == track.TrackPoints.First()) {
                 forward = !forward;
+            }
             nextTrackPoint = GetNextTrackPoint();
             map.Traffic[Tuple.Create(currentTrackPoint, nextTrackPoint)].Enqueue(this);
         }
